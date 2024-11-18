@@ -4,7 +4,7 @@ import { useState } from "react";
 import useSWR from "swr";
 
 export default function Home() {
-  const { data, error, isLoading } = useSWR("/api/geolocation", (url) =>
+  const { data } = useSWR("/api/geolocation", (url) =>
     fetch(url).then((res) => res.json())
   );
 
