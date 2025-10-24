@@ -1,18 +1,8 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import useSWR from "swr";
 
 export default function Home() {
-  const { data } = useSWR("/api/geolocation", (url) =>
-    fetch(url).then((res) => res.json())
-  );
-
-  if (data) {
-    console.log(data);
-  }
   const [city, setCity] = useState("");
-  const router = useRouter();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCity(event.target.value);
@@ -20,8 +10,8 @@ export default function Home() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    router.push(`/${city}`);
   };
+
   return (
     <main className="container flex justify-center items-center mx-auto h-[calc(100vh-64px)]">
       <form
