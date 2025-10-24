@@ -88,7 +88,7 @@ export default function Home() {
   };
 
   return (
-    <main className="container flex flex-col gap-10 justify-center items-center mx-auto h-[calc(100vh-64px)]">
+    <main className="container flex flex-col gap-10 justify-center items-center mx-auto h-full pb-10">
       <WeatherSearchForm
         onSearch={handleSearch}
         loading={loading}
