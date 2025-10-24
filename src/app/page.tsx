@@ -37,24 +37,13 @@ export default function Home() {
     setIsVisible(false);
 
     try {
-      const apiKey = process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY;
-      if (!apiKey) {
-        throw new Error(
-          "API ключ не найден. Добавьте NEXT_PUBLIC_OPENWEATHERMAP_API_KEY в .env.local"
-        );
-      }
-
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
-          city
-        )}&appid=${apiKey}&units=metric&lang=ru`
+        `/api/weather?city=${encodeURIComponent(city)}`
       );
 
       if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error("Город не найден. Проверьте правильность написания.");
-        }
-        throw new Error(`Ошибка API: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Ошибка API: ${response.status}`);
       }
 
       const data: WeatherData = await response.json();
