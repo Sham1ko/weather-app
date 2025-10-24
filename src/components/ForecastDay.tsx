@@ -21,7 +21,7 @@ export default function ForecastDay({
 }: ForecastDayProps) {
   return (
     <div
-      className={`flex items-center justify-between p-3 rounded-lg transition-all duration-300 ${
+      className={`flex items-center justify-between p-3 rounded-lg transition-all duration-300 h-full ${
         isSelected
           ? "bg-blue-50 border border-blue-200"
           : "hover:bg-gray-50 border border-transparent"

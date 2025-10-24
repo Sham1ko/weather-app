@@ -103,7 +103,7 @@ export default function Home() {
       )}
 
       {weatherData && (
-        <div className="flex flex-col lg:flex-row gap-6 w-full max-w-7xl h-full">
+        <div className="flex flex-col lg:flex-row gap-6 w-full h-full">
           <div className="lg:w-3/4 flex flex-col gap-4 h-full">
             <div className="flex-1">
               <WeatherCard

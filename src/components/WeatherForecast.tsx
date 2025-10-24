@@ -94,7 +94,7 @@ export default function WeatherForecast({
       </div>
 
       {/* Forecast List */}
-      <div className="space-y-2 flex-1 overflow-y-auto">
+      <div className="flex-1 flex flex-col justify-between gap-2">
         {forecastData.map((day, index) => (
           <ForecastDay
             key={`${day.date}-${day.day}`}
