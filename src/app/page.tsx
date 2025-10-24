@@ -42,15 +42,12 @@ export default function Home() {
     setLoading(true);
     setError(null);
     setIsSubmitted(true);
+    setIsFocused(true); // Сразу устанавливаем фокус при начале загрузки
 
     // Сразу показываем карточку погоды при начале загрузки
     if (!isVisible) {
       setTimeout(() => {
         setIsVisible(true);
-        // Устанавливаем фокус на карточку погоды
-        setTimeout(() => {
-          setIsFocused(true);
-        }, 200);
       }, 100);
     }
 
@@ -92,15 +89,12 @@ export default function Home() {
     setLoading(true);
     setError(null);
     setIsSubmitted(true);
+    setIsFocused(true); // Сразу устанавливаем фокус при начале загрузки
 
     // Сразу показываем карточку погоды при начале загрузки
     if (!isVisible) {
       setTimeout(() => {
         setIsVisible(true);
-        // Устанавливаем фокус на карточку погоды
-        setTimeout(() => {
-          setIsFocused(true);
-        }, 200);
       }, 100);
     }
 
@@ -111,7 +105,7 @@ export default function Home() {
       setHourlyData(mockHourlyData);
 
       setLoading(false);
-    }, 4000);
+    }, 1000);
   };
 
   return (
