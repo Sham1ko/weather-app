@@ -26,7 +26,7 @@ export default function DailyForecast({
     return (
       <div
         className={`bg-red-50 border border-red-200 rounded-xl transition-all duration-500 ease-in-out transform h-full ${
-          isFocused ? "p-6 shadow-2xl" : "p-4 shadow-lg"
+          isFocused ? "p-6 shadow-lg" : "p-4 shadow-lg"
         }`}
       >
         <div className="text-red-600 text-center py-2 text-sm">
@@ -39,7 +39,7 @@ export default function DailyForecast({
   return (
     <div
       className={`bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full flex flex-col ${
-        isFocused ? "p-6 shadow-2xl" : "p-4 shadow-lg"
+        isFocused ? "p-6 shadow-lg" : "p-4 shadow-lg"
       }`}
     >
       {/* Header */}

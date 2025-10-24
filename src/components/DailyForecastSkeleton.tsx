@@ -10,7 +10,7 @@ export default function DailyForecastSkeleton({
   return (
     <div
       className={`bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full flex flex-col ${
-        isFocused ? "p-6 shadow-2xl" : "p-4 shadow-lg"
+        isFocused ? "p-6 shadow-lg" : "p-4 shadow-lg"
       }`}
     >
       {/* Header Skeleton */}

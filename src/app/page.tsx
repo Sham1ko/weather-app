@@ -111,7 +111,7 @@ export default function Home() {
       setHourlyData(mockHourlyData);
 
       setLoading(false);
-    }, 1000);
+    }, 4000);
   };
 
   return (
