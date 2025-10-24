@@ -13,7 +13,7 @@ export default function WeatherCardSkeleton({
     <div
       className={`flex flex-col bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      } ${isFocused ? "p-8 scale-100 shadow-2xl" : "p-6 scale-90 shadow-lg"}`}
+      } ${isFocused ? "p-8 shadow-2xl" : "p-6 shadow-lg"}`}
     >
       {/* City Title and Icon Skeleton */}
       <div className="flex justify-between items-start">

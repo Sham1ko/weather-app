@@ -1,5 +1,6 @@
 "use client";
 import { getWeatherIcon } from "@/utils/weatherUtils";
+import DailyForecastSkeleton from "./DailyForecastSkeleton";
 import type { HourlyForecast } from "@/types/weather";
 
 interface DailyForecastProps {
@@ -18,25 +19,14 @@ export default function DailyForecast({
   hourlyData = [],
 }: DailyForecastProps) {
   if (loading) {
-    return (
-      <div
-        className={`bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full ${
-          isFocused ? "p-6 scale-100 shadow-2xl" : "p-4 scale-90 shadow-lg"
-        }`}
-      >
-        <div className="text-gray-600 text-center py-4">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-600 mx-auto mb-2"></div>
-          Загрузка почасового прогноза...
-        </div>
-      </div>
-    );
+    return <DailyForecastSkeleton isFocused={isFocused} />;
   }
 
   if (error) {
     return (
       <div
         className={`bg-red-50 border border-red-200 rounded-xl transition-all duration-500 ease-in-out transform h-full ${
-          isFocused ? "p-6 scale-100 shadow-2xl" : "p-4 scale-90 shadow-lg"
+          isFocused ? "p-6 shadow-2xl" : "p-4 shadow-lg"
         }`}
       >
         <div className="text-red-600 text-center py-2 text-sm">
@@ -49,7 +39,7 @@ export default function DailyForecast({
   return (
     <div
       className={`bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full flex flex-col ${
-        isFocused ? "p-6 scale-100 shadow-2xl" : "p-4 scale-90 shadow-lg"
+        isFocused ? "p-6 shadow-2xl" : "p-4 shadow-lg"
       }`}
     >
       {/* Header */}
