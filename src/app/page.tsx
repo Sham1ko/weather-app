@@ -36,15 +36,23 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSearch = async (city: string) => {
     setLoading(true);
     setError(null);
-    // Не сбрасываем isVisible и isFocused для сохранения layout
-    // setWeatherData(null);
-    // setHourlyData([]);
-    // setIsVisible(false);
-    // setIsFocused(false);
+    setIsSubmitted(true);
+
+    // Сразу показываем карточку погоды при начале загрузки
+    if (!isVisible) {
+      setTimeout(() => {
+        setIsVisible(true);
+        // Устанавливаем фокус на карточку погоды
+        setTimeout(() => {
+          setIsFocused(true);
+        }, 200);
+      }, 100);
+    }
 
     try {
       // Загружаем данные о погоде и прогнозе одним запросом
@@ -67,16 +75,7 @@ export default function Home() {
       const processedHourlyData = processHourlyForecastData(forecastData);
       setHourlyData(processedHourlyData);
 
-      // Устанавливаем состояния только если они еще не установлены
-      if (!isVisible) {
-        setTimeout(() => {
-          setIsVisible(true);
-          // Устанавливаем фокус на карточку погоды
-          setTimeout(() => {
-            setIsFocused(true);
-          }, 200);
-        }, 100);
-      }
+      // isVisible уже установлен в начале функции
     } catch (error) {
       console.error("Ошибка при получении данных о погоде:", error);
       setError(
@@ -92,23 +91,24 @@ export default function Home() {
   const handleMock = () => {
     setLoading(true);
     setError(null);
+    setIsSubmitted(true);
+
+    // Сразу показываем карточку погоды при начале загрузки
+    if (!isVisible) {
+      setTimeout(() => {
+        setIsVisible(true);
+        // Устанавливаем фокус на карточку погоды
+        setTimeout(() => {
+          setIsFocused(true);
+        }, 200);
+      }, 100);
+    }
 
     // Имитируем задержку загрузки
     setTimeout(() => {
       setWeatherData(mockWeatherData);
       setForecastData(mockForecastData);
       setHourlyData(mockHourlyData);
-
-      // Устанавливаем состояния только если они еще не установлены
-      if (!isVisible) {
-        setTimeout(() => {
-          setIsVisible(true);
-          // Устанавливаем фокус на карточку погоды
-          setTimeout(() => {
-            setIsFocused(true);
-          }, 200);
-        }, 100);
-      }
 
       setLoading(false);
     }, 1000);
@@ -121,7 +121,7 @@ export default function Home() {
         onMock={handleMock}
         loading={loading}
         isFocused={isFocused}
-        isSubmitted={!!weatherData}
+        isSubmitted={isSubmitted}
       />
 
       {error && (
