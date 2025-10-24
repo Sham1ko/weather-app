@@ -4,11 +4,13 @@ import { useState } from "react";
 interface WeatherSearchFormProps {
   onSearch: (city: string) => void;
   loading: boolean;
+  isFocused: boolean;
 }
 
 export default function WeatherSearchForm({
   onSearch,
   loading,
+  isFocused,
 }: WeatherSearchFormProps) {
   const [city, setCity] = useState("");
 
@@ -25,12 +27,18 @@ export default function WeatherSearchForm({
 
   return (
     <form
-      className="max-w-3xl w-full md:max-w-lg flex flex-col bg-white rounded-xl border border-gray-200 backdrop-blur-md p-10"
+      className={`max-w-3xl w-full md:max-w-lg flex flex-col bg-white rounded-xl border border-gray-200 backdrop-blur-md transition-all duration-500 ease-in-out ${
+        isFocused
+          ? "max-w-md md:max-w-sm p-6 opacity-80 scale-95"
+          : "p-10 opacity-100 scale-100"
+      }`}
       onSubmit={handleSubmit}
     >
       <label
         htmlFor="large-input"
-        className="text-4xl flex justify-center mb-5"
+        className={`flex justify-center mb-5 transition-all duration-500 ease-in-out ${
+          isFocused ? "text-2xl" : "text-4xl"
+        }`}
       >
         Search city
       </label>

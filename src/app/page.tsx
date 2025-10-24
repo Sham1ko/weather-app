@@ -22,12 +22,14 @@ export default function Home() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleSearch = async (city: string) => {
     setLoading(true);
     setError(null);
     setWeatherData(null);
     setIsVisible(false);
+    setIsFocused(false);
 
     try {
       const response = await fetch(
@@ -45,6 +47,10 @@ export default function Home() {
       // Добавляем небольшую задержку для плавной анимации
       setTimeout(() => {
         setIsVisible(true);
+        // Устанавливаем фокус на карточку погоды
+        setTimeout(() => {
+          setIsFocused(true);
+        }, 200);
       }, 100);
     } catch (error) {
       console.error("Ошибка при получении данных о погоде:", error);
@@ -60,7 +66,11 @@ export default function Home() {
 
   return (
     <main className="container flex flex-col gap-10 justify-center items-center mx-auto h-[calc(100vh-64px)]">
-      <WeatherSearchForm onSearch={handleSearch} loading={loading} />
+      <WeatherSearchForm
+        onSearch={handleSearch}
+        loading={loading}
+        isFocused={isFocused}
+      />
 
       {error && (
         <div className="max-w-3xl w-full md:max-w-lg flex flex-col bg-red-50 border border-red-200 rounded-xl p-4">
@@ -76,6 +86,7 @@ export default function Home() {
           windSpeed={weatherData.wind.speed}
           description={weatherData.weather[0].description}
           isVisible={isVisible}
+          isFocused={isFocused}
         />
       )}
     </main>
