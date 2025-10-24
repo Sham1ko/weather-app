@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
+import WeatherCardSkeleton from "@/components/WeatherCardSkeleton";
 import WeatherSearchForm from "@/components/WeatherSearchForm";
 import WeatherForecast from "@/components/WeatherForecast";
 import DailyForecast from "@/components/DailyForecast";
@@ -105,24 +106,31 @@ export default function Home() {
         </div>
       )}
 
-      {weatherData && (
+      {(weatherData || loading) && (
         <div className="flex flex-col lg:flex-row gap-6 w-full h-full">
           <div className="lg:w-3/4 flex flex-col gap-4 h-full">
             <div className="flex-1">
-              <WeatherCard
-                city={weatherData.name}
-                temperature={weatherData.main.temp}
-                humidity={weatherData.main.humidity}
-                windSpeed={weatherData.wind.speed}
-                description={weatherData.weather[0].description}
-                isVisible={isVisible}
-                isFocused={isFocused}
-              />
+              {loading ? (
+                <WeatherCardSkeleton
+                  isVisible={isVisible}
+                  isFocused={isFocused}
+                />
+              ) : weatherData ? (
+                <WeatherCard
+                  city={weatherData.name}
+                  temperature={weatherData.main.temp}
+                  humidity={weatherData.main.humidity}
+                  windSpeed={weatherData.wind.speed}
+                  description={weatherData.weather[0].description}
+                  isVisible={isVisible}
+                  isFocused={isFocused}
+                />
+              ) : null}
             </div>
             <div className="flex-1">
               <DailyForecast
                 isFocused={isFocused}
-                city={weatherData.name}
+                city={weatherData?.name || ""}
                 loading={loading}
                 error={error}
                 hourlyData={hourlyData}
@@ -132,7 +140,7 @@ export default function Home() {
           <div className="lg:w-1/4 h-full">
             <WeatherForecast
               isFocused={isFocused}
-              city={weatherData.name}
+              city={weatherData?.name || ""}
               loading={loading}
               error={error}
             />

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import ForecastDay from "./ForecastDay";
+import ForecastDaySkeleton from "./ForecastDaySkeleton";
 import type { WeatherForecast } from "@/types/weather";
 
 interface WeatherForecastProps {
@@ -17,9 +18,11 @@ export default function WeatherForecast({
   error,
 }: WeatherForecastProps) {
   const [forecastData, setForecastData] = useState<WeatherForecast[]>([]);
+  const [forecastLoading, setForecastLoading] = useState(false);
 
   useEffect(() => {
     const fetchForecast = async () => {
+      setForecastLoading(true);
       try {
         const response = await fetch(
           `/api/forecast?city=${encodeURIComponent(city)}`
@@ -39,6 +42,8 @@ export default function WeatherForecast({
         setForecastData(processedData);
       } catch (error) {
         console.error("Ошибка при получении прогноза:", error);
+      } finally {
+        setForecastLoading(false);
       }
     };
 
@@ -46,21 +51,6 @@ export default function WeatherForecast({
       fetchForecast();
     }
   }, [city, loading]);
-
-  if (loading) {
-    return (
-      <div
-        className={`bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full ${
-          isFocused ? "p-8 scale-100 shadow-2xl" : "p-6 scale-90 shadow-lg"
-        }`}
-      >
-        <div className="text-gray-600 text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600 mx-auto mb-4"></div>
-          Загрузка прогноза...
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -95,18 +85,26 @@ export default function WeatherForecast({
 
       {/* Forecast List */}
       <div className="flex-1 flex flex-col justify-between gap-2">
-        {forecastData.map((day, index) => (
-          <ForecastDay
-            key={`${day.date}-${day.day}`}
-            date={day.date}
-            day={day.day}
-            icon={day.icon}
-            high={day.high}
-            low={day.low}
-            description={day.description}
-            isSelected={index === 0} // Выделяем первый день
-          />
-        ))}
+        {forecastLoading
+          ? // Показываем skeleton во время загрузки
+            Array.from({ length: 5 }).map((_, index) => (
+              <ForecastDaySkeleton
+                key={`skeleton-${index}`}
+                isSelected={index === 0}
+              />
+            ))
+          : forecastData.map((day, index) => (
+              <ForecastDay
+                key={`${day.date}-${day.day}`}
+                date={day.date}
+                day={day.day}
+                icon={day.icon}
+                high={day.high}
+                low={day.low}
+                description={day.description}
+                isSelected={index === 0} // Выделяем первый день
+              />
+            ))}
       </div>
     </div>
   );
