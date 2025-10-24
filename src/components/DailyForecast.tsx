@@ -1,4 +1,5 @@
 "use client";
+import { getWeatherIcon } from "@/utils/weatherUtils";
 import type { HourlyForecast } from "@/types/weather";
 
 interface DailyForecastProps {
@@ -72,7 +73,7 @@ export default function DailyForecast({
                 className="text-center p-2 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="text-xs text-gray-500 mb-1">{hour.time}</div>
-                <div className="text-lg mb-1">{hour.icon}</div>
+                <div className="text-lg mb-1">{getWeatherIcon(hour.icon)}</div>
                 <div className="text-sm font-medium text-gray-800">
                   {hour.temp}°
                 </div>

@@ -6,6 +6,11 @@ import WeatherSearchForm from "@/components/WeatherSearchForm";
 import WeatherForecast from "@/components/WeatherForecast";
 import DailyForecast from "@/components/DailyForecast";
 import { processHourlyForecastData } from "@/utils/weatherUtils";
+import {
+  mockWeatherData,
+  mockForecastData,
+  mockHourlyData,
+} from "@/utils/mockData";
 import type { HourlyForecast } from "@/types/weather";
 
 interface WeatherData {
@@ -84,10 +89,36 @@ export default function Home() {
     }
   };
 
+  const handleMock = () => {
+    setLoading(true);
+    setError(null);
+
+    // Имитируем задержку загрузки
+    setTimeout(() => {
+      setWeatherData(mockWeatherData);
+      setForecastData(mockForecastData);
+      setHourlyData(mockHourlyData);
+
+      // Устанавливаем состояния только если они еще не установлены
+      if (!isVisible) {
+        setTimeout(() => {
+          setIsVisible(true);
+          // Устанавливаем фокус на карточку погоды
+          setTimeout(() => {
+            setIsFocused(true);
+          }, 200);
+        }, 100);
+      }
+
+      setLoading(false);
+    }, 1000);
+  };
+
   return (
     <main className="container flex flex-col gap-10 justify-center items-center mx-auto h-full pb-10">
       <WeatherSearchForm
         onSearch={handleSearch}
+        onMock={handleMock}
         loading={loading}
         isFocused={isFocused}
         isSubmitted={!!weatherData}

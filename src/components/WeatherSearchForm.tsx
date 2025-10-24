@@ -3,6 +3,7 @@ import { useState } from "react";
 
 interface WeatherSearchFormProps {
   onSearch: (city: string) => void;
+  onMock: () => void;
   loading: boolean;
   isFocused: boolean;
   isSubmitted: boolean;
@@ -10,6 +11,7 @@ interface WeatherSearchFormProps {
 
 export default function WeatherSearchForm({
   onSearch,
+  onMock,
   loading,
   isFocused,
   isSubmitted,
@@ -61,15 +63,28 @@ export default function WeatherSearchForm({
         disabled={loading}
       />
 
-      <button
-        type="submit"
-        disabled={loading}
-        className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-hidden focus:ring-blue-300 font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-500 ease-in-out ${
-          isSubmitted ? "px-6 py-3 text-sm" : "text-sm px-4 py-2 mt-4"
-        }`}
-      >
-        {loading ? "Загрузка..." : "Search"}
-      </button>
+      <div className={`flex gap-2 ${isSubmitted ? "flex-row" : "flex-col"}`}>
+        <button
+          type="submit"
+          disabled={loading}
+          className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-hidden focus:ring-blue-300 font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-500 ease-in-out ${
+            isSubmitted ? "px-6 py-3 text-sm flex-1" : "text-sm px-4 py-2 mt-4"
+          }`}
+        >
+          {loading ? "Загрузка..." : "Search"}
+        </button>
+
+        <button
+          type="button"
+          onClick={onMock}
+          disabled={loading}
+          className={`text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-hidden focus:ring-green-300 font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-500 ease-in-out ${
+            isSubmitted ? "px-6 py-3 text-sm flex-1" : "text-sm px-4 py-2 mt-2"
+          }`}
+        >
+          Mock
+        </button>
+      </div>
     </form>
   );
 }
