@@ -2,6 +2,10 @@
 import { useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import WeatherSearchForm from "@/components/WeatherSearchForm";
+import WeatherForecast from "@/components/WeatherForecast";
+import DailyForecast from "@/components/DailyForecast";
+import { processHourlyForecastData } from "@/utils/weatherUtils";
+import type { HourlyForecast } from "@/types/weather";
 
 interface WeatherData {
   name: string;
@@ -20,6 +24,7 @@ interface WeatherData {
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [hourlyData, setHourlyData] = useState<HourlyForecast[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -28,21 +33,39 @@ export default function Home() {
     setLoading(true);
     setError(null);
     setWeatherData(null);
+    setHourlyData([]);
     setIsVisible(false);
     setIsFocused(false);
 
     try {
-      const response = await fetch(
-        `/api/weather?city=${encodeURIComponent(city)}`
-      );
+      // Загружаем данные о погоде и прогнозе параллельно
+      const [weatherResponse, forecastResponse] = await Promise.all([
+        fetch(`/api/weather?city=${encodeURIComponent(city)}`),
+        fetch(`/api/forecast?city=${encodeURIComponent(city)}`),
+      ]);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Ошибка API: ${response.status}`);
+      if (!weatherResponse.ok) {
+        const errorData = await weatherResponse.json();
+        throw new Error(
+          errorData.error || `Ошибка API: ${weatherResponse.status}`
+        );
       }
 
-      const data: WeatherData = await response.json();
-      setWeatherData(data);
+      if (!forecastResponse.ok) {
+        const errorData = await forecastResponse.json();
+        throw new Error(
+          errorData.error || `Ошибка прогноза: ${forecastResponse.status}`
+        );
+      }
+
+      const weatherData = await weatherResponse.json();
+      const forecastData = await forecastResponse.json();
+
+      setWeatherData(weatherData);
+
+      // Обрабатываем данные почасового прогноза
+      const processedHourlyData = processHourlyForecastData(forecastData);
+      setHourlyData(processedHourlyData);
 
       // Добавляем небольшую задержку для плавной анимации
       setTimeout(() => {
@@ -70,6 +93,7 @@ export default function Home() {
         onSearch={handleSearch}
         loading={loading}
         isFocused={isFocused}
+        isSubmitted={!!weatherData}
       />
 
       {error && (
@@ -79,15 +103,38 @@ export default function Home() {
       )}
 
       {weatherData && (
-        <WeatherCard
-          city={weatherData.name}
-          temperature={weatherData.main.temp}
-          humidity={weatherData.main.humidity}
-          windSpeed={weatherData.wind.speed}
-          description={weatherData.weather[0].description}
-          isVisible={isVisible}
-          isFocused={isFocused}
-        />
+        <div className="flex flex-col lg:flex-row gap-6 w-full max-w-7xl h-full">
+          <div className="lg:w-3/4 flex flex-col gap-4 h-full">
+            <div className="flex-1">
+              <WeatherCard
+                city={weatherData.name}
+                temperature={weatherData.main.temp}
+                humidity={weatherData.main.humidity}
+                windSpeed={weatherData.wind.speed}
+                description={weatherData.weather[0].description}
+                isVisible={isVisible}
+                isFocused={isFocused}
+              />
+            </div>
+            <div className="flex-1">
+              <DailyForecast
+                isFocused={isFocused}
+                city={weatherData.name}
+                loading={loading}
+                error={error}
+                hourlyData={hourlyData}
+              />
+            </div>
+          </div>
+          <div className="lg:w-1/4 h-full">
+            <WeatherForecast
+              isFocused={isFocused}
+              city={weatherData.name}
+              loading={loading}
+              error={error}
+            />
+          </div>
+        </div>
       )}
     </main>
   );

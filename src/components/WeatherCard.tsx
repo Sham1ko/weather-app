@@ -21,15 +21,9 @@ export default function WeatherCard({
 }: WeatherCardProps) {
   return (
     <div
-      className={`flex flex-col bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform ${
-        isVisible
-          ? "opacity-100 translate-y-0 scale-100"
-          : "opacity-0 translate-y-8 scale-95"
-      } ${
-        isFocused
-          ? "max-w-4xl w-full md:max-w-2xl p-12 scale-105 shadow-2xl"
-          : "max-w-3xl w-full md:max-w-lg p-10 scale-100 shadow-lg"
-      }`}
+      className={`flex flex-col bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      } ${isFocused ? "p-8 scale-100 shadow-2xl" : "p-6 scale-90 shadow-lg"}`}
     >
       <h2
         className={`font-medium transition-all duration-500 ease-in-out ${
