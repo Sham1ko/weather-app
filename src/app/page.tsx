@@ -32,10 +32,11 @@ export default function Home() {
   const handleSearch = async (city: string) => {
     setLoading(true);
     setError(null);
-    setWeatherData(null);
-    setHourlyData([]);
-    setIsVisible(false);
-    setIsFocused(false);
+    // Не сбрасываем isVisible и isFocused для сохранения layout
+    // setWeatherData(null);
+    // setHourlyData([]);
+    // setIsVisible(false);
+    // setIsFocused(false);
 
     try {
       // Загружаем данные о погоде и прогнозе параллельно
@@ -67,14 +68,16 @@ export default function Home() {
       const processedHourlyData = processHourlyForecastData(forecastData);
       setHourlyData(processedHourlyData);
 
-      // Добавляем небольшую задержку для плавной анимации
-      setTimeout(() => {
-        setIsVisible(true);
-        // Устанавливаем фокус на карточку погоды
+      // Устанавливаем состояния только если они еще не установлены
+      if (!isVisible) {
         setTimeout(() => {
-          setIsFocused(true);
-        }, 200);
-      }, 100);
+          setIsVisible(true);
+          // Устанавливаем фокус на карточку погоды
+          setTimeout(() => {
+            setIsFocused(true);
+          }, 200);
+        }, 100);
+      }
     } catch (error) {
       console.error("Ошибка при получении данных о погоде:", error);
       setError(
