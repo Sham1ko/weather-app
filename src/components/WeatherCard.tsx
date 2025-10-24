@@ -1,4 +1,5 @@
 "use client";
+import { getWeatherIcon } from "@/utils/weatherUtils";
 
 interface WeatherCardProps {
   city: string;
@@ -6,6 +7,7 @@ interface WeatherCardProps {
   humidity: number;
   windSpeed: number;
   description: string;
+  icon: string;
   isVisible: boolean;
   isFocused: boolean;
 }
@@ -16,6 +18,7 @@ export default function WeatherCard({
   humidity,
   windSpeed,
   description,
+  icon,
   isVisible,
   isFocused,
 }: WeatherCardProps) {
@@ -25,13 +28,22 @@ export default function WeatherCard({
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       } ${isFocused ? "p-8 scale-100 shadow-2xl" : "p-6 scale-90 shadow-lg"}`}
     >
-      <h2
-        className={`font-medium transition-all duration-500 ease-in-out ${
-          isFocused ? "text-4xl" : "text-2xl"
-        }`}
-      >
-        Погода в {city}
-      </h2>
+      <div className="flex justify-between items-start">
+        <h2
+          className={`font-medium transition-all duration-500 ease-in-out ${
+            isFocused ? "text-4xl" : "text-2xl"
+          }`}
+        >
+          Погода в {city}
+        </h2>
+        <div
+          className={`transition-all duration-500 ease-in-out ${
+            isFocused ? "text-6xl" : "text-4xl"
+          }`}
+        >
+          {getWeatherIcon(icon)}
+        </div>
+      </div>
       <div
         className={`mt-4 space-y-2 transition-all duration-500 ease-in-out ${
           isFocused ? "space-y-4" : "space-y-2"

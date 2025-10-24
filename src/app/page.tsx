@@ -16,6 +16,7 @@ interface WeatherData {
   };
   weather: Array<{
     description: string;
+    icon: string;
   }>;
   wind: {
     speed: number;
@@ -114,6 +115,7 @@ export default function Home() {
                   humidity={weatherData.main.humidity}
                   windSpeed={weatherData.wind.speed}
                   description={weatherData.weather[0].description}
+                  icon={weatherData.weather[0].icon}
                   isVisible={isVisible}
                   isFocused={isFocused}
                 />

@@ -15,13 +15,22 @@ export default function WeatherCardSkeleton({
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       } ${isFocused ? "p-8 scale-100 shadow-2xl" : "p-6 scale-90 shadow-lg"}`}
     >
-      {/* City Title Skeleton */}
-      <div
-        className={`transition-all duration-500 ease-in-out ${
-          isFocused ? "h-10" : "h-8"
-        }`}
-      >
-        <div className="w-48 h-full bg-gray-200 rounded animate-pulse"></div>
+      {/* City Title and Icon Skeleton */}
+      <div className="flex justify-between items-start">
+        <div
+          className={`transition-all duration-500 ease-in-out ${
+            isFocused ? "h-10" : "h-8"
+          }`}
+        >
+          <div className="w-48 h-full bg-gray-200 rounded animate-pulse"></div>
+        </div>
+        <div
+          className={`transition-all duration-500 ease-in-out ${
+            isFocused ? "w-16 h-16" : "w-12 h-12"
+          }`}
+        >
+          <div className="w-full h-full bg-gray-200 rounded-full animate-pulse"></div>
+        </div>
       </div>
 
       {/* Weather Details Skeleton */}
