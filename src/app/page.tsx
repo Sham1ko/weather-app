@@ -26,6 +26,7 @@ export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [hourlyData, setHourlyData] = useState<HourlyForecast[]>([]);
+  const [forecastData, setForecastData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -40,30 +41,21 @@ export default function Home() {
     // setIsFocused(false);
 
     try {
-      // Загружаем данные о погоде и прогнозе параллельно
-      const [weatherResponse, forecastResponse] = await Promise.all([
-        fetch(`/api/weather?city=${encodeURIComponent(city)}`),
-        fetch(`/api/forecast?city=${encodeURIComponent(city)}`),
-      ]);
+      // Загружаем данные о погоде и прогнозе одним запросом
+      const response = await fetch(
+        `/api/weather-data?city=${encodeURIComponent(city)}`
+      );
 
-      if (!weatherResponse.ok) {
-        const errorData = await weatherResponse.json();
-        throw new Error(
-          errorData.error || `Ошибка API: ${weatherResponse.status}`
-        );
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Ошибка API: ${response.status}`);
       }
 
-      if (!forecastResponse.ok) {
-        const errorData = await forecastResponse.json();
-        throw new Error(
-          errorData.error || `Ошибка прогноза: ${forecastResponse.status}`
-        );
-      }
-
-      const weatherData = await weatherResponse.json();
-      const forecastData = await forecastResponse.json();
+      const { weather: weatherData, forecast: forecastData } =
+        await response.json();
 
       setWeatherData(weatherData);
+      setForecastData(forecastData);
 
       // Обрабатываем данные почасового прогноза
       const processedHourlyData = processHourlyForecastData(forecastData);
@@ -143,6 +135,7 @@ export default function Home() {
               city={weatherData?.name || ""}
               loading={loading}
               error={error}
+              forecastData={forecastData}
             />
           </div>
         </div>

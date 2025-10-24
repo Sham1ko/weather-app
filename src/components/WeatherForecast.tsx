@@ -9,6 +9,7 @@ interface WeatherForecastProps {
   city: string;
   loading: boolean;
   error: string | null;
+  forecastData?: any;
 }
 
 export default function WeatherForecast({
@@ -16,41 +17,19 @@ export default function WeatherForecast({
   city,
   loading,
   error,
+  forecastData: rawForecastData,
 }: WeatherForecastProps) {
   const [forecastData, setForecastData] = useState<WeatherForecast[]>([]);
-  const [forecastLoading, setForecastLoading] = useState(false);
 
   useEffect(() => {
-    const fetchForecast = async () => {
-      setForecastLoading(true);
-      try {
-        const response = await fetch(
-          `/api/forecast?city=${encodeURIComponent(city)}`
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || `Ошибка API: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        // Импортируем утилиту для обработки данных
-        const { processForecastData } = await import("@/utils/weatherUtils");
-        const processedData = processForecastData(data);
-
+    if (rawForecastData) {
+      // Импортируем утилиту для обработки данных
+      import("@/utils/weatherUtils").then(({ processForecastData }) => {
+        const processedData = processForecastData(rawForecastData);
         setForecastData(processedData);
-      } catch (error) {
-        console.error("Ошибка при получении прогноза:", error);
-      } finally {
-        setForecastLoading(false);
-      }
-    };
-
-    if (city && !loading) {
-      fetchForecast();
+      });
     }
-  }, [city, loading]);
+  }, [rawForecastData]);
 
   if (error) {
     return (
@@ -85,7 +64,7 @@ export default function WeatherForecast({
 
       {/* Forecast List */}
       <div className="flex-1 flex flex-col justify-between gap-2">
-        {forecastLoading
+        {loading
           ? // Показываем skeleton во время загрузки
             Array.from({ length: 5 }).map((_, index) => (
               <ForecastDaySkeleton
