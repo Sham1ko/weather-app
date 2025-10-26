@@ -21,7 +21,7 @@ export default function RootLayout({
         <link rel="icon" href="/cloud.png" />
       </head>
       <body className={montserrat.className}>
-        <div className="flex flex-col h-full lg:h-screen">
+        <div className="flex flex-col h-full lg:h-screen container mx-auto">
           <Header />
           {children}
         </div>

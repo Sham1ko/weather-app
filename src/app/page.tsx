@@ -108,7 +108,7 @@ export default function Home() {
   };
 
   return (
-    <main className="container flex flex-col gap-4 justify-center items-center mx-auto h-full pb-4">
+    <main className="flex flex-col gap-4 justify-center items-center h-full w-full pb-4">
       <WeatherSearchForm
         onSearch={handleSearch}
         onMock={handleMock}
