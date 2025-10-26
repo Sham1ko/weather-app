@@ -35,23 +35,19 @@ export default function WeatherSearchForm({
         isSubmitted
           ? "w-full flex flex-row items-center p-4 gap-4"
           : isFocused
-          ? "max-w-md md:max-w-sm flex flex-col p-6 opacity-80 scale-95"
-          : "max-w-3xl w-full md:max-w-lg flex flex-col p-10 opacity-100 scale-100"
+            ? "max-w-md md:max-w-sm flex flex-col p-6 opacity-80 scale-95"
+            : "max-w-3xl w-full md:max-w-lg flex flex-col p-10 opacity-100 scale-100"
       }`}
       onSubmit={handleSubmit}
     >
-      <label
-        htmlFor="large-input"
-        className={`flex justify-center transition-all duration-500 ease-in-out ${
-          isFocused ? "text-2xl" : "text-4xl"
-        } ${
-          isSubmitted
-            ? "opacity-0 scale-95 -translate-y-4 max-h-0 mb-0 max-w-0 overflow-hidden"
-            : "opacity-100 scale-100 translate-y-0 max-h-20 max-w-full mb-5"
-        }`}
-      >
-        Search city
-      </label>
+      {isSubmitted || (
+        <label
+          htmlFor="large-input"
+          className="flex justify-center transition-all duration-500 ease-in-out text-4xl mb-5"
+        >
+          Search city
+        </label>
+      )}
 
       <input
         type="text"
