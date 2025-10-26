@@ -109,7 +109,7 @@ export default function Home() {
   };
 
   return (
-    <main className="container flex flex-col gap-10 justify-center items-center mx-auto h-full pb-10">
+    <main className="container flex flex-col gap-4 justify-center items-center mx-auto h-full pb-4">
       <WeatherSearchForm
         onSearch={handleSearch}
         onMock={handleMock}
@@ -125,7 +125,7 @@ export default function Home() {
       )}
 
       {(weatherData || loading) && (
-        <div className="flex flex-col lg:flex-row gap-6 w-full h-full">
+        <div className="flex flex-col lg:flex-row gap-4 w-full h-full">
           <div className="lg:w-3/4 flex flex-col gap-4 h-full">
             <div className="flex-1">
               {loading ? (
