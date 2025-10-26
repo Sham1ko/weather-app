@@ -54,7 +54,7 @@ export default function Home() {
     try {
       // Загружаем данные о погоде и прогнозе одним запросом
       const response = await fetch(
-        `/api/weather-data?city=${encodeURIComponent(city)}`
+        `/api/weather-data?city=${encodeURIComponent(city)}`,
       );
 
       if (!response.ok) {
@@ -78,7 +78,7 @@ export default function Home() {
       setError(
         error instanceof Error
           ? error.message
-          : "Произошла ошибка при загрузке данных"
+          : "Произошла ошибка при загрузке данных",
       );
     } finally {
       setLoading(false);
@@ -142,7 +142,6 @@ export default function Home() {
                   description={weatherData.weather[0].description}
                   icon={weatherData.weather[0].icon}
                   isVisible={isVisible}
-                  isFocused={isFocused}
                 />
               ) : null}
             </div>
