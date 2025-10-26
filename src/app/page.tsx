@@ -129,10 +129,7 @@ export default function Home() {
           <div className="lg:w-3/4 flex flex-col gap-4 h-full">
             <div className="flex-1">
               {loading ? (
-                <WeatherCardSkeleton
-                  isVisible={isVisible}
-                  isFocused={isFocused}
-                />
+                <WeatherCardSkeleton isVisible={isVisible} />
               ) : weatherData ? (
                 <WeatherCard
                   city={weatherData.name}
