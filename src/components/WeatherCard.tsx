@@ -1,5 +1,6 @@
 "use client";
 import { getWeatherIcon } from "@/utils/weatherUtils";
+import WeatherCardSkeleton from "@/components/WeatherCardSkeleton";
 
 interface WeatherCardProps {
   city: string;
@@ -9,6 +10,7 @@ interface WeatherCardProps {
   description: string;
   icon: string;
   isVisible: boolean;
+  loading: boolean;
 }
 
 export default function WeatherCard({
@@ -19,7 +21,12 @@ export default function WeatherCard({
   description,
   icon,
   isVisible,
+  loading,
 }: WeatherCardProps) {
+  if (loading) {
+    return <WeatherCardSkeleton isVisible={isVisible} />;
+  }
+
   return (
     <div
       className={`flex flex-col bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full p-8 shadow-lg ${

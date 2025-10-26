@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
-import WeatherCardSkeleton from "@/components/WeatherCardSkeleton";
 import WeatherSearchForm from "@/components/WeatherSearchForm";
 import WeatherForecast from "@/components/WeatherForecast";
 import DailyForecast from "@/components/DailyForecast";
@@ -128,19 +127,16 @@ export default function Home() {
         <div className="flex flex-col lg:flex-row gap-4 w-full h-full">
           <div className="lg:w-3/4 flex flex-col gap-4 h-full">
             <div className="flex-1">
-              {loading ? (
-                <WeatherCardSkeleton isVisible={isVisible} />
-              ) : weatherData ? (
-                <WeatherCard
-                  city={weatherData.name}
-                  temperature={weatherData.main.temp}
-                  humidity={weatherData.main.humidity}
-                  windSpeed={weatherData.wind.speed}
-                  description={weatherData.weather[0].description}
-                  icon={weatherData.weather[0].icon}
-                  isVisible={isVisible}
-                />
-              ) : null}
+              <WeatherCard
+                city={weatherData?.name || ""}
+                temperature={weatherData?.main.temp || 0}
+                humidity={weatherData?.main.humidity || 0}
+                windSpeed={weatherData?.wind.speed || 0}
+                description={weatherData?.weather[0].description || ""}
+                icon={weatherData?.weather[0].icon || "01d"}
+                isVisible={isVisible}
+                loading={loading}
+              />
             </div>
             <div className="flex-1">
               <DailyForecast
