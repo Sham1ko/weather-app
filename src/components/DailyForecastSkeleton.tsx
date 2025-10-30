@@ -27,7 +27,7 @@ export default function DailyForecastSkeleton({
       {/* Hourly Forecast Skeleton */}
       <div className="flex-1 flex items-center">
         <div className="grid grid-cols-4 gap-2 w-full">
-          {Array.from({ length: 4 }).map((_, index) => (
+          {Array.from({ length: 8 }).map((_, index) => (
             <div key={index} className="text-center p-2 rounded-lg">
               {/* Time Skeleton */}
               <div className="w-8 h-3 bg-gray-200 rounded animate-pulse mx-auto mb-1"></div>
