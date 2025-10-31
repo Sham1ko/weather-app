@@ -4,6 +4,7 @@ import WeatherCard from "@/components/WeatherCard";
 import WeatherSearchForm from "@/components/WeatherSearchForm";
 import WeatherForecast from "@/components/WeatherForecast";
 import DailyForecast from "@/components/DailyForecast";
+import LocationWeatherCard from "@/components/LocationWeatherCard";
 import { processHourlyForecastData } from "@/utils/weatherUtils";
 import {
   mockWeatherData,
@@ -53,7 +54,7 @@ export default function Home() {
     try {
       // Загружаем данные о погоде и прогнозе одним запросом
       const response = await fetch(
-        `/api/weather-data?city=${encodeURIComponent(city)}`,
+        `/api/weather-data?city=${encodeURIComponent(city)}`
       );
 
       if (!response.ok) {
@@ -77,7 +78,7 @@ export default function Home() {
       setError(
         error instanceof Error
           ? error.message
-          : "Произошла ошибка при загрузке данных",
+          : "Произошла ошибка при загрузке данных"
       );
     } finally {
       setLoading(false);
@@ -109,6 +110,10 @@ export default function Home() {
 
   return (
     <main className="flex flex-col gap-4 justify-center items-center h-full w-full pb-4">
+      <div className="w-full max-w-md">
+        <LocationWeatherCard />
+      </div>
+
       <WeatherSearchForm
         onSearch={handleSearch}
         onMock={handleMock}
