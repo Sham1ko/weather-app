@@ -24,22 +24,14 @@ export default function WeatherCard({
   loading,
 }: WeatherCardProps) {
   if (loading) {
-    return <WeatherCardSkeleton isVisible={isVisible} />;
+    return <WeatherCardSkeleton />;
   }
 
   return (
-    <div
-      className={`flex flex-col bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full p-8 shadow-lg ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}
-    >
+    <div className="flex flex-col bg-white rounded-xl border border-gray-200 h-full p-8 shadow-lg">
       <div className="flex justify-between items-start">
-        <h2 className="font-medium transition-all duration-500 ease-in-out text-4xl">
-          Погода в {city}
-        </h2>
-        <div className="transition-all duration-500 ease-in-out text-6xl">
-          {getWeatherIcon(icon)}
-        </div>
+        <h2 className="font-medium text-4xl">Погода в {city}</h2>
+        <div className="text-6xl">{getWeatherIcon(icon)}</div>
       </div>
       <div className="mt-4 space-y-2 transition-all duration-500 ease-in-out">
         <p className="text-gray-700 transition-all duration-500 ease-in-out text-2xl">

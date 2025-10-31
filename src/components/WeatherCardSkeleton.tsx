@@ -1,16 +1,6 @@
-interface WeatherCardSkeletonProps {
-  isVisible: boolean;
-}
-
-export default function WeatherCardSkeleton({
-  isVisible,
-}: WeatherCardSkeletonProps) {
+export default function WeatherCardSkeleton() {
   return (
-    <div
-      className={`flex flex-col bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full p-8 shadow-lg ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}
-    >
+    <div className="flex flex-col bg-white rounded-xl border border-gray-200 h-full p-8 shadow-lg">
       {/* City Title and Icon Skeleton */}
       <div className="flex justify-between items-start">
         <div className="transition-all duration-500 ease-in-out h-10">
