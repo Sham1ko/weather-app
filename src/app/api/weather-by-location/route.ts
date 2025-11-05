@@ -1,14 +1,21 @@
+import redis from "@/lib/redis";
 import { geolocation } from "@vercel/functions";
 import { NextRequest, NextResponse } from "next/server";
-
-export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   try {
     const { city } = geolocation(request);
 
     // Если город не определен, используем Алматы по умолчанию
-    const targetCity = city || "Алматы";
+    const targetCity = city || "Almaty";
+
+    const cacheKey = `weatherByLocation:${targetCity.toLowerCase()}`;
+    const cached = await redis.get(cacheKey);
+
+    if (cached) {
+      console.log("Cached data found for city:", targetCity);
+      return NextResponse.json(JSON.parse(cached));
+    }
 
     const apiKey = process.env.OPENWEATHERMAP_API_KEY;
     if (!apiKey) {
@@ -45,6 +52,10 @@ export async function GET(request: NextRequest) {
     }
 
     const weatherData = await weatherResponse.json();
+
+    await redis.set(cacheKey, JSON.stringify({ weather: weatherData }), {
+      EX: 3600,
+    });
 
     return NextResponse.json({
       weather: weatherData,
