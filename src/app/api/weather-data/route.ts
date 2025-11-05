@@ -1,3 +1,4 @@
+import redis from "@/lib/redis";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -6,6 +7,14 @@ export async function GET(request: NextRequest) {
 
   if (!city) {
     return NextResponse.json({ error: "Город не указан" }, { status: 400 });
+  }
+
+  const cacheKey = `weather:${city.toLowerCase()}`;
+  const cached = await redis.get(cacheKey);
+
+  if (cached) {
+    console.log("Cached data found for city:", city);
+    return NextResponse.json(JSON.parse(cached));
   }
 
   try {
@@ -49,6 +58,15 @@ export async function GET(request: NextRequest) {
 
     const weatherData = await weatherResponse.json();
     const forecastData = await forecastResponse.json();
+
+    await redis.set(
+      cacheKey,
+      JSON.stringify({
+        weather: weatherData,
+        forecast: forecastData,
+      }),
+      { EX: 3600 }
+    );
 
     return NextResponse.json({
       weather: weatherData,
