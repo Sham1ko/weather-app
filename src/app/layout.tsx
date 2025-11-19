@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Header from "@/components/Header";
+import PetProjectBadge from "@/components/PetProjectBadge";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         <div className="flex flex-col h-full lg:h-screen container mx-auto">
           <Header />
           {children}
+          <PetProjectBadge />
         </div>
         <Analytics />
       </body>
