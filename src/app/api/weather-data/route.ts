@@ -1,4 +1,4 @@
-import redis from "@/lib/redis";
+import { isRedisAvailable, safeRedisGet, safeRedisSet } from "@/lib/redis";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -10,11 +10,14 @@ export async function GET(request: NextRequest) {
   }
 
   const cacheKey = `weather:${city.toLowerCase()}`;
-  const cached = await redis.get(cacheKey);
+  const cached = await safeRedisGet(cacheKey);
 
   if (cached) {
     console.log("Cached data found for city:", city);
-    return NextResponse.json(JSON.parse(cached));
+    return NextResponse.json({
+      ...JSON.parse(cached),
+      redisAvailable: isRedisAvailable(),
+    });
   }
 
   try {
@@ -59,7 +62,7 @@ export async function GET(request: NextRequest) {
     const weatherData = await weatherResponse.json();
     const forecastData = await forecastResponse.json();
 
-    await redis.set(
+    await safeRedisSet(
       cacheKey,
       JSON.stringify({
         weather: weatherData,
@@ -71,6 +74,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       weather: weatherData,
       forecast: forecastData,
+      redisAvailable: isRedisAvailable(),
     });
   } catch (error) {
     console.error("Ошибка API:", error);

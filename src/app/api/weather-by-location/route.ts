@@ -1,4 +1,4 @@
-import redis from "@/lib/redis";
+import { isRedisAvailable, safeRedisGet, safeRedisSet } from "@/lib/redis";
 import { geolocation } from "@vercel/functions";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,11 +10,14 @@ export async function GET(request: NextRequest) {
     const targetCity = city || "Almaty";
 
     const cacheKey = `weatherByLocation:${targetCity.toLowerCase()}`;
-    const cached = await redis.get(cacheKey);
+    const cached = await safeRedisGet(cacheKey);
 
     if (cached) {
       console.log("Cached data found for city:", targetCity);
-      return NextResponse.json(JSON.parse(cached));
+      return NextResponse.json({
+        ...JSON.parse(cached),
+        redisAvailable: isRedisAvailable(),
+      });
     }
 
     const apiKey = process.env.OPENWEATHERMAP_API_KEY;
@@ -40,7 +43,10 @@ export async function GET(request: NextRequest) {
         );
         if (almatyResponse.ok) {
           const weatherData = await almatyResponse.json();
-          return NextResponse.json({ weather: weatherData });
+          return NextResponse.json({
+            weather: weatherData,
+            redisAvailable: isRedisAvailable(),
+          });
         }
       }
 
@@ -53,12 +59,13 @@ export async function GET(request: NextRequest) {
 
     const weatherData = await weatherResponse.json();
 
-    await redis.set(cacheKey, JSON.stringify({ weather: weatherData }), {
+    await safeRedisSet(cacheKey, JSON.stringify({ weather: weatherData }), {
       EX: 3600,
     });
 
     return NextResponse.json({
       weather: weatherData,
+      redisAvailable: isRedisAvailable(),
     });
   } catch (error) {
     console.error("Ошибка API:", error);

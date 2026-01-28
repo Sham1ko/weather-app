@@ -5,6 +5,7 @@ import WeatherSearchForm from "@/components/WeatherSearchForm";
 import WeatherForecast from "@/components/WeatherForecast";
 import DailyForecast from "@/components/DailyForecast";
 import LocationWeatherCard from "@/components/LocationWeatherCard";
+import RedisStatusBadge from "@/components/RedisStatusBadge";
 import { processHourlyForecastData } from "@/utils/weatherUtils";
 import {
   mockWeatherData,
@@ -37,6 +38,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [redisAvailable, setRedisAvailable] = useState<boolean | null>(null);
 
   const handleSearch = async (city: string) => {
     setLoading(true);
@@ -62,11 +64,17 @@ export default function Home() {
         throw new Error(errorData.error || `Ошибка API: ${response.status}`);
       }
 
-      const { weather: weatherData, forecast: forecastData } =
-        await response.json();
+      const {
+        weather: weatherData,
+        forecast: forecastData,
+        redisAvailable: redisStatus,
+      } = await response.json();
 
       setWeatherData(weatherData);
       setForecastData(forecastData);
+      if (typeof redisStatus === "boolean") {
+        setRedisAvailable(redisStatus);
+      }
 
       // Обрабатываем данные почасового прогноза
       const processedHourlyData = processHourlyForecastData(forecastData);
@@ -103,6 +111,7 @@ export default function Home() {
       setWeatherData(mockWeatherData);
       setForecastData(mockForecastData);
       setHourlyData(mockHourlyData);
+      setRedisAvailable(null);
 
       setLoading(false);
     }, 1000);
@@ -111,8 +120,10 @@ export default function Home() {
   return (
     <main className="flex flex-col gap-4 justify-center items-center h-full w-full pb-4">
       <div className="w-full max-w-md">
-        <LocationWeatherCard />
+        <LocationWeatherCard onRedisStatus={setRedisAvailable} />
       </div>
+
+      <RedisStatusBadge available={redisAvailable} />
 
       <WeatherSearchForm
         onSearch={handleSearch}
