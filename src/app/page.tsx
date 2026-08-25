@@ -159,7 +159,7 @@ export default function Home() {
 
       {(weatherData || loading) && (
         <div className="flex flex-col lg:flex-row gap-4 w-full max-w-5xl items-stretch">
-          <div className="lg:w-2/3 flex flex-col gap-4">
+          <div className="lg:w-2/3 flex flex-col justify-between">
             <WeatherCard
               city={weatherData?.name || ""}
               temperature={weatherData?.main.temp || 0}
