@@ -33,7 +33,7 @@ export default function DailyForecast({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-lg flex flex-col">
+    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-lg flex flex-col grow">
       {/* Header */}
       <div className="mb-3">
         <h3

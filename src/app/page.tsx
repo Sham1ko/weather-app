@@ -178,7 +178,7 @@ export default function Home() {
               hourlyData={hourlyData}
             />
           </div>
-          <div className="lg:w-1/3">
+          <div className="lg:w-1/3 flex flex-col">
             <WeatherForecast
               isFocused={isFocused}
               city={weatherData?.name || ""}

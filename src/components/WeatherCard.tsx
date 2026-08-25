@@ -28,7 +28,7 @@ export default function WeatherCard({
   }
 
   return (
-    <div className="flex flex-col bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
+    <div className="flex flex-col grow bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
       {/* Заголовок и иконка */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
