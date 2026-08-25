@@ -1,9 +1,41 @@
 import { createClient } from "@redis/client";
-import type { SetOptions } from "@redis/client";
+import type { RedisClientType, SetOptions } from "@redis/client";
 
-const redis = createClient({
-  url: process.env.REDIS_URL || "redis://localhost:6379",
-});
+// ─────────────────────────────────────────────────────────────────────────────
+// Флаг включения модуля Redis — переменная окружения REDIS_ENABLED:
+//   true | on  | 1 | yes → модуль работает (значение по умолчанию)
+//   false | off | 0 | no → модуль полностью отключён: клиент не создаётся,
+//                          соединения не выполняются, кэш-функции сразу
+//                          возвращают пустой результат.
+// ─────────────────────────────────────────────────────────────────────────────
+const parseRedisEnabled = () => {
+  const raw = process.env.REDIS_ENABLED?.trim().toLowerCase();
+  if (!raw) {
+    return true;
+  }
+  return !["false", "off", "0", "no"].includes(raw);
+};
+
+const REDIS_ENABLED = parseRedisEnabled();
+
+/** Включён ли модуль Redis (по переменной окружения REDIS_ENABLED). */
+export const isRedisEnabled = () => REDIS_ENABLED;
+
+let redis: RedisClientType | null = null;
+
+if (REDIS_ENABLED) {
+  redis = createClient({
+    url: process.env.REDIS_URL || "redis://localhost:6379",
+  });
+
+  redis.on("error", (err) => {
+    void err;
+    markRedisUnavailable();
+  });
+}
+
+/** Клиент доступен только при включённом флаге. */
+const getClient = (): RedisClientType | null => (REDIS_ENABLED ? redis : null);
 
 let redisAvailable = false;
 let hasRedisFailedOnce = false;
@@ -48,13 +80,13 @@ const withTimeout = async <T>(promise: Promise<T>, ms: number) => {
   return outcome;
 };
 
-redis.on("error", (err) => {
-  void err;
-  markRedisUnavailable();
-});
+const ensureRedisConnection = async (): Promise<boolean> => {
+  const client = getClient();
+  if (!client) {
+    return false;
+  }
 
-const ensureRedisConnection = async () => {
-  if (redis.isOpen) {
+  if (client.isOpen) {
     redisAvailable = true;
     return true;
   }
@@ -71,7 +103,7 @@ const ensureRedisConnection = async () => {
   lastConnectAttempt = now;
   connectPromise = (async () => {
     try {
-      const outcome = await withTimeout(redis.connect(), getRedisTimeoutMs());
+      const outcome = await withTimeout(client.connect(), getRedisTimeoutMs());
       if (outcome.timedOut) {
         markRedisUnavailable();
         return false;
@@ -94,7 +126,10 @@ const ensureRedisConnection = async () => {
   return connectPromise;
 };
 
-export const isRedisAvailable = () => redisAvailable;
+/**
+ * Доступен ли Redis прямо сейчас: флаг включён И соединение установлено.
+ */
+export const isRedisAvailable = () => REDIS_ENABLED && redisAvailable;
 
 export const safeRedisGet = async (key: string) => {
   const isReady = await ensureRedisConnection();
@@ -102,8 +137,13 @@ export const safeRedisGet = async (key: string) => {
     return null;
   }
 
+  const client = getClient();
+  if (!client) {
+    return null;
+  }
+
   try {
-    const outcome = await withTimeout(redis.get(key), getRedisTimeoutMs());
+    const outcome = await withTimeout(client.get(key), getRedisTimeoutMs());
     if (outcome.timedOut) {
       markRedisUnavailable();
       return null;
@@ -130,9 +170,14 @@ export const safeRedisSet = async (
     return false;
   }
 
+  const client = getClient();
+  if (!client) {
+    return false;
+  }
+
   try {
     const outcome = await withTimeout(
-      redis.set(key, value, options),
+      client.set(key, value, options),
       getRedisTimeoutMs()
     );
     if (outcome.timedOut) {
@@ -150,5 +195,3 @@ export const safeRedisSet = async (
     return false;
   }
 };
-
-export default redis;

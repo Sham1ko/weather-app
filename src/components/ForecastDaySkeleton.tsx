@@ -9,15 +9,15 @@ export default function ForecastDaySkeleton({
 }: ForecastDaySkeletonProps) {
   return (
     <div
-      className={`flex items-center justify-between p-3 rounded-lg transition-all duration-300 h-full ${
+      className={`flex items-center justify-between px-3 py-2 rounded-lg ${
         isSelected
           ? "bg-blue-50 border border-blue-200"
           : "hover:bg-gray-50 border border-transparent"
       }`}
     >
       {/* Weather Icon Skeleton */}
-      <div className="flex items-center space-x-3">
-        <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+      <div className="flex items-center space-x-2.5">
+        <div className="w-7 h-7 bg-gray-200 rounded-full animate-pulse"></div>
         <div className="space-y-1">
           <div className="w-8 h-4 bg-gray-200 rounded animate-pulse"></div>
           <div className="w-6 h-3 bg-gray-200 rounded animate-pulse"></div>

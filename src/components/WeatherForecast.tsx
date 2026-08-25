@@ -33,12 +33,8 @@ export default function WeatherForecast({
 
   if (error) {
     return (
-      <div
-        className={`bg-red-50 border border-red-200 rounded-xl transition-all duration-500 ease-in-out transform h-full ${
-          isFocused ? "p-8 shadow-lg" : "p-6 shadow-lg"
-        }`}
-      >
-        <div className="text-red-600 text-center py-4">
+      <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-lg">
+        <div className="text-red-600 text-center py-2 text-sm">
           Ошибка загрузки прогноза: {error}
         </div>
       </div>
@@ -46,16 +42,12 @@ export default function WeatherForecast({
   }
 
   return (
-    <div
-      className={`bg-white rounded-xl border border-gray-200 transition-all duration-500 ease-in-out transform h-full flex flex-col ${
-        isFocused ? "p-8 shadow-lg" : "p-6 shadow-lg"
-      }`}
-    >
+    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-lg flex flex-col">
       {/* Header */}
-      <div className="mb-6">
+      <div className="mb-3">
         <h3
-          className={`text-gray-800 font-bold transition-all duration-500 ease-in-out ${
-            isFocused ? "text-3xl" : "text-2xl"
+          className={`text-gray-800 font-bold ${
+            isFocused ? "text-xl" : "text-lg"
           }`}
         >
           Forecast
@@ -63,7 +55,7 @@ export default function WeatherForecast({
       </div>
 
       {/* Forecast List */}
-      <div className="flex-1 flex flex-col justify-between gap-2">
+      <div className="flex flex-col gap-1.5">
         {loading
           ? // Показываем skeleton во время загрузки
             Array.from({ length: 5 }).map((_, index) => (

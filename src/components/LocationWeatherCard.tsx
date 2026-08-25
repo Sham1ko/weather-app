@@ -13,8 +13,13 @@ interface WeatherData {
   }>;
 }
 
+interface RedisStatus {
+  available: boolean;
+  enabled?: boolean;
+}
+
 interface LocationWeatherCardProps {
-  onRedisStatus?: (available: boolean) => void;
+  onRedisStatus?: (status: RedisStatus) => void;
 }
 
 export default function LocationWeatherCard({
@@ -42,7 +47,10 @@ export default function LocationWeatherCard({
         const data = await response.json();
         setWeather(data.weather);
         if (typeof data.redisAvailable === "boolean") {
-          onRedisStatus?.(data.redisAvailable);
+          onRedisStatus?.({
+            available: data.redisAvailable,
+            enabled: data.redisEnabled,
+          });
         }
       } catch (err) {
         console.error("Ошибка при получении погоды:", err);

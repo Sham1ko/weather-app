@@ -28,26 +28,43 @@ export default function WeatherCard({
   }
 
   return (
-    <div className="flex flex-col bg-white rounded-xl border border-gray-200 h-full p-8 shadow-lg">
-      <div className="flex justify-between items-start">
-        <h2 className="font-medium text-4xl">Weather in {city}</h2>
-        <div className="text-6xl">{getWeatherIcon(icon)}</div>
+    <div className="flex flex-col bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
+      {/* Заголовок и иконка */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h2 className="font-semibold text-lg text-gray-900 truncate">
+            Weather in {city}
+          </h2>
+          <p className="text-sm text-gray-500 capitalize truncate">
+            {description}
+          </p>
+        </div>
+        <div className="text-4xl leading-none shrink-0">
+          {getWeatherIcon(icon)}
+        </div>
       </div>
-      <div className="mt-4 space-y-2 transition-all duration-500 ease-in-out">
-        <p className="text-gray-700 transition-all duration-500 ease-in-out text-2xl">
-          <span className="font-medium">Temperature:</span>{" "}
+
+      {/* Температура и компактные детали в одну строку */}
+      <div className="mt-3 flex items-center justify-between gap-3">
+        <div className="text-4xl font-semibold text-gray-900 leading-none">
           {Math.round(temperature)}°C
-        </p>
-        <p className="text-gray-500 transition-all duration-500 ease-in-out text-lg">
-          <span className="font-medium">Description:</span> {description}
-        </p>
-        <p className="text-gray-500 transition-all duration-500 ease-in-out text-lg">
-          <span className="font-medium">Humidity:</span> {humidity}%
-        </p>
-        <p className="text-gray-500 transition-all duration-500 ease-in-out text-lg">
-          <span className="font-medium">Wind:</span>{" "}
-          {Math.round(windSpeed * 3.6)} km/h
-        </p>
+        </div>
+        <div className="flex gap-2">
+          <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-1.5 text-center">
+            <div className="text-[11px] text-gray-500 leading-tight">
+              Humidity
+            </div>
+            <div className="text-sm font-medium text-gray-800">
+              {humidity}%
+            </div>
+          </div>
+          <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-1.5 text-center">
+            <div className="text-[11px] text-gray-500 leading-tight">Wind</div>
+            <div className="text-sm font-medium text-gray-800">
+              {Math.round(windSpeed * 3.6)} km/h
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

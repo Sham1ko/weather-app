@@ -39,6 +39,7 @@ export default function Home() {
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [redisAvailable, setRedisAvailable] = useState<boolean | null>(null);
+  const [redisEnabled, setRedisEnabled] = useState<boolean | null>(null);
 
   const handleSearch = async (city: string) => {
     setLoading(true);
@@ -68,12 +69,16 @@ export default function Home() {
         weather: weatherData,
         forecast: forecastData,
         redisAvailable: redisStatus,
+        redisEnabled,
       } = await response.json();
 
       setWeatherData(weatherData);
       setForecastData(forecastData);
       if (typeof redisStatus === "boolean") {
         setRedisAvailable(redisStatus);
+      }
+      if (typeof redisEnabled === "boolean") {
+        setRedisEnabled(redisEnabled);
       }
 
       // Обрабатываем данные почасового прогноза
@@ -112,6 +117,7 @@ export default function Home() {
       setForecastData(mockForecastData);
       setHourlyData(mockHourlyData);
       setRedisAvailable(null);
+      setRedisEnabled(null);
 
       setLoading(false);
     }, 1000);
@@ -119,11 +125,23 @@ export default function Home() {
 
   return (
     <main className="flex flex-col gap-4 justify-center items-center h-full w-full pb-4">
-      <div className="w-full max-w-md">
-        <LocationWeatherCard onRedisStatus={setRedisAvailable} />
-      </div>
+      {/* Карточка погоды по геолокации видна только до первого поиска */}
+      {!isSubmitted && (
+        <div className="w-full max-w-md">
+          <LocationWeatherCard
+            onRedisStatus={({ available, enabled }) => {
+              setRedisAvailable(available);
+              if (typeof enabled === "boolean") {
+                setRedisEnabled(enabled);
+              }
+            }}
+          />
+        </div>
+      )}
 
-      <RedisStatusBadge available={redisAvailable} />
+      {redisEnabled !== false && (
+        <RedisStatusBadge available={redisAvailable} />
+      )}
 
       <WeatherSearchForm
         onSearch={handleSearch}
@@ -140,31 +158,27 @@ export default function Home() {
       )}
 
       {(weatherData || loading) && (
-        <div className="flex flex-col lg:flex-row gap-4 w-full h-full">
-          <div className="lg:w-3/4 flex flex-col gap-4 h-full">
-            <div className="flex-1">
-              <WeatherCard
-                city={weatherData?.name || ""}
-                temperature={weatherData?.main.temp || 0}
-                humidity={weatherData?.main.humidity || 0}
-                windSpeed={weatherData?.wind.speed || 0}
-                description={weatherData?.weather[0].description || ""}
-                icon={weatherData?.weather[0].icon || "01d"}
-                isVisible={isVisible}
-                loading={loading}
-              />
-            </div>
-            <div className="flex-1">
-              <DailyForecast
-                isFocused={isFocused}
-                city={weatherData?.name || ""}
-                loading={loading}
-                error={error}
-                hourlyData={hourlyData}
-              />
-            </div>
+        <div className="flex flex-col lg:flex-row gap-4 w-full max-w-5xl items-stretch">
+          <div className="lg:w-2/3 flex flex-col gap-4">
+            <WeatherCard
+              city={weatherData?.name || ""}
+              temperature={weatherData?.main.temp || 0}
+              humidity={weatherData?.main.humidity || 0}
+              windSpeed={weatherData?.wind.speed || 0}
+              description={weatherData?.weather[0].description || ""}
+              icon={weatherData?.weather[0].icon || "01d"}
+              isVisible={isVisible}
+              loading={loading}
+            />
+            <DailyForecast
+              isFocused={isFocused}
+              city={weatherData?.name || ""}
+              loading={loading}
+              error={error}
+              hourlyData={hourlyData}
+            />
           </div>
-          <div className="lg:w-1/4 h-full">
+          <div className="lg:w-1/3">
             <WeatherForecast
               isFocused={isFocused}
               city={weatherData?.name || ""}

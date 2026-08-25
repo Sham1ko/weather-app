@@ -1,4 +1,13 @@
-import { isRedisAvailable, safeRedisGet, safeRedisSet } from "@/lib/redis";
+import {
+  cacheWeatherPayload,
+  fetchOpenWeather,
+  respondWithWeatherError,
+} from "@/lib/openweather";
+import {
+  isRedisAvailable,
+  isRedisEnabled,
+  safeRedisGet,
+} from "@/lib/redis";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -21,26 +30,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const apiKey = process.env.OPENWEATHERMAP_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "API ключ не настроен" },
-        { status: 500 }
-      );
-    }
-
     // Загружаем данные о погоде и прогнозе параллельно
     const [weatherResponse, forecastResponse] = await Promise.all([
-      fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(
-          city
-        )}&appid=${apiKey}&units=metric&lang=ru`
-      ),
-      fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(
-          city
-        )}&appid=${apiKey}&units=metric&lang=ru`
-      ),
+      fetchOpenWeather("/weather", { q: city }),
+      fetchOpenWeather("/forecast", { q: city }),
     ]);
 
     if (!weatherResponse.ok) {
@@ -62,25 +55,19 @@ export async function GET(request: NextRequest) {
     const weatherData = await weatherResponse.json();
     const forecastData = await forecastResponse.json();
 
-    await safeRedisSet(
-      cacheKey,
-      JSON.stringify({
-        weather: weatherData,
-        forecast: forecastData,
-      }),
-      { EX: 3600 }
-    );
+    const payload = JSON.stringify({
+      weather: weatherData,
+      forecast: forecastData,
+    });
+    await cacheWeatherPayload(cacheKey, payload);
 
     return NextResponse.json({
       weather: weatherData,
       forecast: forecastData,
       redisAvailable: isRedisAvailable(),
+      redisEnabled: isRedisEnabled(),
     });
   } catch (error) {
-    console.error("Ошибка API:", error);
-    return NextResponse.json(
-      { error: "Внутренняя ошибка сервера" },
-      { status: 500 }
-    );
+    return respondWithWeatherError(error, `${cacheKey}:stale`);
   }
 }

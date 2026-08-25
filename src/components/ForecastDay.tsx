@@ -21,25 +21,25 @@ export default function ForecastDay({
 }: ForecastDayProps) {
   return (
     <div
-      className={`flex items-center justify-between p-3 rounded-lg transition-all duration-300 h-full ${
+      className={`flex items-center justify-between px-3 py-2 rounded-lg ${
         isSelected
           ? "bg-blue-50 border border-blue-200"
           : "hover:bg-gray-50 border border-transparent"
       }`}
     >
       {/* Weather Icon */}
-      <div className="flex items-center space-x-3">
-        <div className="text-2xl">{icon}</div>
-        <div className="text-gray-800">
+      <div className="flex items-center space-x-2.5">
+        <div className="text-xl leading-none">{icon}</div>
+        <div className="text-gray-800 leading-tight">
           <div className="font-medium">{high}°</div>
-          <div className="text-sm text-gray-500">{low}°</div>
+          <div className="text-xs text-gray-500">{low}°</div>
         </div>
       </div>
 
       {/* Date and Day */}
-      <div className="text-gray-800 text-right">
+      <div className="text-gray-800 text-right leading-tight">
         <div className="font-medium">{date}</div>
-        <div className="text-sm text-gray-500">{day}</div>
+        <div className="text-xs text-gray-500">{day}</div>
       </div>
     </div>
   );
