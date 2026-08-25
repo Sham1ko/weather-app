@@ -72,7 +72,7 @@ const ensureRedisConnection = async () => {
   connectPromise = (async () => {
     try {
       const outcome = await withTimeout(redis.connect(), getRedisTimeoutMs());
-      if ("timedOut" in outcome) {
+      if (outcome.timedOut) {
         markRedisUnavailable();
         return false;
       }
@@ -104,7 +104,7 @@ export const safeRedisGet = async (key: string) => {
 
   try {
     const outcome = await withTimeout(redis.get(key), getRedisTimeoutMs());
-    if ("timedOut" in outcome) {
+    if (outcome.timedOut) {
       markRedisUnavailable();
       return null;
     }
@@ -135,7 +135,7 @@ export const safeRedisSet = async (
       redis.set(key, value, options),
       getRedisTimeoutMs()
     );
-    if ("timedOut" in outcome) {
+    if (outcome.timedOut) {
       markRedisUnavailable();
       return false;
     }
