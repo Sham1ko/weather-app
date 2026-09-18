@@ -24,7 +24,7 @@ export default function MultiDayForecastItem({
       className={`flex items-center justify-between px-3 py-2 rounded-lg ${
         isSelected
           ? "bg-blue-50 border border-blue-200"
-          : "hover:bg-gray-50 border border-transparent"
+          : "border border-transparent"
       }`}
     >
       {/* Weather Icon */}

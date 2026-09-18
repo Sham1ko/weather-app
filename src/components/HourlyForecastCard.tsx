@@ -51,7 +51,7 @@ export default function HourlyForecastCard({
           {hourlyData.map((hour, index) => (
             <div
               key={index}
-              className="text-center p-1.5 rounded-lg hover:bg-gray-50"
+              className="text-center p-1.5 rounded-lg"
             >
               <div className="text-xs text-gray-500 mb-0.5">{hour.time}</div>
               <div className="text-xl leading-none mb-0.5">
