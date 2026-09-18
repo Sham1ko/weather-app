@@ -84,7 +84,7 @@ export default function LocationWeatherCard({
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-md">
       <div className="flex items-center gap-3">
-        <div className="text-4xl">
+        <div className="text-4xl" aria-hidden="true">
           {getWeatherIcon(weather.weather[0].icon)}
         </div>
         <div className="flex-1">

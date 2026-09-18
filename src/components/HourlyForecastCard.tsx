@@ -54,7 +54,7 @@ export default function HourlyForecastCard({
               className="text-center p-1.5 rounded-lg"
             >
               <div className="text-xs text-gray-500 mb-0.5">{hour.time}</div>
-              <div className="text-xl leading-none mb-0.5">
+              <div className="text-xl leading-none mb-0.5" aria-hidden="true">
                 {getWeatherIcon(hour.icon)}
               </div>
               <div className="text-base font-semibold text-gray-800 leading-tight">

@@ -39,7 +39,7 @@ export default function WeatherCard({
             {capitalizeFirst(description)}
           </p>
         </div>
-        <div className="text-4xl leading-none shrink-0">
+        <div className="text-4xl leading-none shrink-0" aria-hidden="true">
           {getWeatherIcon(icon)}
         </div>
       </div>

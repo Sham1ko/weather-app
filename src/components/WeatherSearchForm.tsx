@@ -65,7 +65,7 @@ export default function WeatherSearchForm({
           className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-hidden focus:ring-blue-300 font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed ${isSubmitted ? "px-6 py-3 text-sm flex-1" : "text-sm px-4 py-2 mt-4"
             }`}
         >
-          {loading ? "Загрузка..." : "Найти"}
+          {loading ? "Загрузка…" : "Найти"}
         </button>
       </div>
     </form>

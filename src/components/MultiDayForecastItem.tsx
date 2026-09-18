@@ -29,7 +29,7 @@ export default function MultiDayForecastItem({
     >
       {/* Weather Icon */}
       <div className="flex items-center space-x-2.5">
-        <div className="text-xl leading-none">{icon}</div>
+        <div className="text-xl leading-none" aria-hidden="true">{icon}</div>
         <div className="text-gray-800 leading-tight">
           <div className="font-medium">{high}°</div>
           <div className="text-xs text-gray-500">{low}°</div>
