@@ -86,7 +86,6 @@ export default function LocationWeatherCard({
         aria-live="polite"
         className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-line p-6 text-center"
       >
-            </p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="28"
