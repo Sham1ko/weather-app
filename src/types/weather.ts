@@ -23,6 +23,7 @@ export interface OpenWeatherCurrentResponse {
     humidity: number;
   };
   weather: Array<{
+    id: number;
     description: string;
     icon: string;
   }>;
@@ -32,7 +33,7 @@ export interface OpenWeatherCurrentResponse {
   };
 }
 
-// OpenWeatherMap API Response Types
+// Форма ответа OpenWeather /forecast, используемая приложением (подмножество)
 export interface OpenWeatherForecastResponse {
   list: Array<{
     dt: number;
@@ -43,6 +44,7 @@ export interface OpenWeatherForecastResponse {
       humidity: number;
     };
     weather: Array<{
+      id: number;
       main: string;
       description: string;
       icon: string;

@@ -7,7 +7,7 @@ import MultiDayForecastCard from "@/components/MultiDayForecastCard";
 import HourlyForecastCard from "@/components/HourlyForecastCard";
 import LocationWeatherCard from "@/components/LocationWeatherCard";
 import RedisStatusBadge from "@/components/RedisStatusBadge";
-import { useI18n } from "@/i18n/LocaleProvider";
+import { getLocale, useI18n } from "@/i18n/LocaleProvider";
 import { processHourlyForecastData } from "@/utils/weatherUtils";
 import type {
   HourlyForecast,
@@ -55,8 +55,6 @@ export default function Home() {
   const [searchNonce, setSearchNonce] = useState(0);
   // Город, который сейчас показан: источник сравнения для URL-навигации
   const currentCityRef = useRef<string | null>(null);
-  // Зеркало локали для обработчиков, живущих вне рендера
-  const localeRef = useRef(locale);
   const [weatherData, setWeatherData] =
     useState<OpenWeatherCurrentResponse | null>(null);
   const [hourlyData, setHourlyData] = useState<HourlyForecast[]>([]);
@@ -92,7 +90,7 @@ export default function Home() {
       // Загружаем данные о погоде и прогнозе одним запросом;
       // bypassCache=1 заставляет сервер игнорировать свежий кэш
       const params = new URLSearchParams({ city });
-      params.set("lang", localeRef.current);
+      params.set("lang", getLocale());
       if (options?.bypassCache) {
         params.set("refresh", "1");
       }
@@ -126,7 +124,7 @@ export default function Home() {
       // Обрабатываем данные почасового прогноза
       const processedHourlyData = processHourlyForecastData(
         forecastData,
-        localeRef.current
+        getLocale()
       );
       setHourlyData(processedHourlyData);
     } catch (error) {
@@ -187,14 +185,15 @@ export default function Home() {
     // замыкание первого рендера не устаревает
   }, []);
 
-  // Обновляем ref для обработчиков, живущих вне рендера
-  useEffect(() => {
-    localeRef.current = locale;
-  }, [locale]);
-
   // Смена языка: перезапрашиваем текущий город, чтобы описания API
-  // пришли на новом языке (из Redis-кэша — мгновенно)
+  // пришли на новом языке (из Redis-кэша — мгновенно). Первый запуск
+  // пропускаем — стартовый поиск делает URL-эффект
+  const prevLocaleRef = useRef(locale);
   useEffect(() => {
+    if (prevLocaleRef.current === locale) {
+      return;
+    }
+    prevLocaleRef.current = locale;
     if (currentCityRef.current) {
       handleSearch(currentCityRef.current);
     }
@@ -268,6 +267,7 @@ export default function Home() {
               windSpeed={weatherData?.wind.speed || 0}
               windDeg={weatherData?.wind.deg ?? 0}
               description={weatherData?.weather[0].description || ""}
+              conditionId={weatherData?.weather[0].id ?? 800}
               icon={weatherData?.weather[0].icon || "01d"}
               fetchedAt={fetchedAt}
               onRefresh={handleRefresh}

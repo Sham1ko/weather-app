@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { capitalizeFirst } from "@/utils/weatherUtils";
+import { capitalizeFirst, describeCondition } from "@/utils/weatherUtils";
 import WeatherIcon from "@/components/WeatherIcon";
 import { useI18n } from "@/i18n/LocaleProvider";
 
@@ -10,6 +10,7 @@ interface WeatherData {
     temp: number;
   };
   weather: Array<{
+    id: number;
     description: string;
     icon: string;
   }>;
@@ -137,7 +138,8 @@ export default function LocationWeatherCard({
         <div className="flex-1">
           <h3 className="font-medium text-lg">{weather.name}</h3>
           <p className="text-ink-secondary text-sm">
-            {capitalizeFirst(weather.weather[0].description)}
+            {describeCondition(weather.weather[0].id, locale) ??
+              capitalizeFirst(weather.weather[0].description)}
           </p>
         </div>
         <div className="text-right">

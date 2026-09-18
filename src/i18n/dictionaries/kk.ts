@@ -5,8 +5,8 @@ import type { Dictionary } from "./ru";
 const kk: Dictionary = {
   "app.name": "Weather App",
   "header.home": "Басты бетке",
-  "header.theme.light": "Ашық тақырыпты қосу",
-  "header.theme.dark": "Қараңғы тақырыпты қосу",
+  "header.theme.light": "Ашық режимді қосу",
+  "header.theme.dark": "Қараңғы режимді қосу",
   "header.language": "Тіл",
   "search.label": "Қала іздеу",
   "search.placeholder": "Мысалы, Алматы…",

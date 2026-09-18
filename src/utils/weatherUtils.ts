@@ -4,7 +4,41 @@ import {
   HourlyForecast,
 } from "@/types/weather";
 
+// Казахские описания условий по коду weather[0].id: в OpenWeather API
+// казахского языка нет, группируем по диапазонам id (та же гранулярность,
+// что у иконок)
+export function describeCondition(id: number, locale: string): string | null {
+  if (locale !== "kk") {
+    return null;
+  }
+  if (id >= 200 && id < 300) return "Найзағай";
+  if (id >= 300 && id < 400) return "Сұлық жаңбыр";
+  if (id >= 500 && id < 600) return "Жаңбыр";
+  if (id >= 600 && id < 700) return "Қар";
+  if (id === 800) return "Ашық";
+  if (id > 800 && id < 900) return "Бұлтты";
+  if (id >= 700 && id < 800) return "Тұман";
+  return null;
+}
+
+// Казахские названия месяцев и дней недели — свои, а не Intl:
+// браузерное kk-форматирование ненадёжно (даёт «М09» и английские "Sat")
+const KK_MONTHS = [
+  "қаң.", "ақп.", "нау.", "сәу.", "мам.", "мау.",
+  "шіл.", "там.", "қыр.", "қаз.", "қар.", "жел.",
+];
+const KK_WEEKDAYS = [
+  "жек.", "дүй.", "сей.", "сәр.", "бей.", "жұм.", "сен.",
+]; // индекс = getUTCDay(): 0 — воскресенье
+
 export function formatDate(date: Date, locale: string): { date: string; day: string } {
+  if (locale === "kk") {
+    return {
+      date: `${date.getUTCDate()} ${KK_MONTHS[date.getUTCMonth()]}`,
+      day: KK_WEEKDAYS[date.getUTCDay()],
+    };
+  }
+
   // date уже сдвинута в рамку города: форматируем как UTC, чтобы
   // toLocaleDateString не сдвинул её обратно в часовой пояс зрителя
   const intlLocale = resolveIntlLocale(locale);
@@ -68,6 +102,19 @@ export function formatUpdatedAt(
   const minutes = Math.floor((now - timestamp) / 60_000);
   if (minutes < 1) {
     return justNowLabel;
+  }
+  // В казахском после числительного существительное не склоняется,
+  // поэтому относительное время собираем сами — RTF("kk") в браузерах
+  // тоже ненадёжен
+  if (locale === "kk") {
+    if (minutes < 60) {
+      return `${minutes} минут бұрын`;
+    }
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) {
+      return `${hours} сағат бұрын`;
+    }
+    return `${Math.floor(hours / 24)} күн бұрын`;
   }
   const rtf = new Intl.RelativeTimeFormat(resolveIntlLocale(locale), {
     numeric: "auto",
@@ -146,7 +193,9 @@ export function processForecastData(
         icon: middayData.weather[0].icon,
         high: Math.round(maxTemp),
         low: Math.round(minTemp),
-        description: middayData.weather[0].description,
+        description:
+          describeCondition(middayData.weather[0].id, locale) ??
+          middayData.weather[0].description,
       };
     });
 
@@ -174,7 +223,9 @@ export function processHourlyForecastData(
       time,
       temp: Math.round(item.main.temp),
       icon: item.weather[0].icon,
-      description: item.weather[0].description,
+      description:
+        describeCondition(item.weather[0].id, locale) ??
+        item.weather[0].description,
     };
   });
 

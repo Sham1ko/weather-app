@@ -42,6 +42,11 @@ function getServerSnapshot(): Locale {
   return "ru";
 }
 
+/** Текущая локаль для кода вне React (обработчики, утилиты). */
+export function getLocale(): Locale {
+  return getSnapshot();
+}
+
 function subscribe(callback: () => void) {
   const invalidate = () => {
     cachedLocale = null;

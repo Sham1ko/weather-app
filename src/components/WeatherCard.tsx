@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import {
   capitalizeFirst,
+  describeCondition,
   formatUpdatedAt,
   getWindDirection,
 } from "@/utils/weatherUtils";
@@ -17,6 +18,7 @@ interface WeatherCardProps {
   windSpeed: number;
   windDeg: number;
   description: string;
+  conditionId: number;
   icon: string;
   fetchedAt?: number | null;
   onRefresh?: () => void;
@@ -31,6 +33,7 @@ export default function WeatherCard({
   windSpeed,
   windDeg,
   description,
+  conditionId,
   icon,
   fetchedAt,
   onRefresh,
@@ -43,6 +46,10 @@ export default function WeatherCard({
     return () => clearInterval(id);
   }, []);
   const { locale, t } = useI18n();
+  // Для kk описания API не существует — берём казахское название условия,
+  // для ru/en — текст API с заглавной буквы
+  const descriptionText =
+    describeCondition(conditionId, locale) ?? capitalizeFirst(description);
   if (loading) {
     return <WeatherCardSkeleton />;
   }
@@ -56,7 +63,7 @@ export default function WeatherCard({
             {city}
           </h2>
           <p className="text-sm text-ink-secondary truncate">
-            {capitalizeFirst(description)}
+            {descriptionText}
           </p>
           {typeof fetchedAt === "number" && (
             <div className="flex items-center gap-1 mt-1 text-xs text-ink-muted">
