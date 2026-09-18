@@ -70,10 +70,12 @@ export default function LocationWeatherCard({
     return (
       <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm animate-pulse">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-line rounded"></div>
-          <div className="flex-1 space-y-2">
-            <div className="w-24 h-4 bg-line rounded"></div>
-            <div className="w-32 h-6 bg-line rounded"></div>
+          {/* иконка 40px, как WeatherIcon */}
+          <div className="w-10 h-10 bg-line rounded-full"></div>
+          <div className="flex-1">
+            {/* name: text-lg = 28px, description: text-sm = 20px */}
+            <div className="w-28 h-7 bg-line rounded"></div>
+            <div className="w-32 h-5 bg-line rounded"></div>
           </div>
         </div>
       </div>
