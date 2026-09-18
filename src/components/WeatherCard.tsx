@@ -106,17 +106,17 @@ export default function WeatherCard({
           </div>
         </div>
         <div className="flex gap-2">
-          <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-1.5 text-center">
-            <div className="text-[11px] text-gray-500 leading-tight">
+          <div className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-center">
+            <div className="text-[11px] text-ink-muted leading-tight">
               Влажность
             </div>
-            <div className="text-sm font-medium text-gray-800">
+            <div className="text-sm font-medium text-ink tabular-nums">
               {humidity}%
             </div>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-1.5 text-center">
-            <div className="text-[11px] text-gray-500 leading-tight">Ветер</div>
-            <div className="text-sm font-medium text-gray-800">
+          <div className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-center">
+            <div className="text-[11px] text-ink-muted leading-tight">Ветер</div>
+            <div className="text-sm font-medium text-ink tabular-nums">
               {Math.round(windSpeed * 3.6)} км/ч {getWindDirection(windDeg)}
             </div>
           </div>

@@ -171,9 +171,26 @@ export default function Home() {
       {error && (
         <div
           aria-live="polite"
-          className="max-w-3xl w-full md:max-w-lg flex flex-col bg-red-50 border border-red-200 rounded-2xl p-4"
+          className="max-w-3xl w-full md:max-w-lg flex items-start gap-2.5 bg-rose-50 border border-rose-200 rounded-lg p-4"
         >
-          <p className="text-red-600 text-center">{error}</p>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className="shrink-0 mt-0.5 text-rose-500"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" x2="12" y1="8" y2="12" />
+            <line x1="12" x2="12.01" y1="16" y2="16" />
+          </svg>
+          <p className="text-rose-600 text-sm">{error}</p>
         </div>
       )}
 
