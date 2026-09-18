@@ -8,7 +8,7 @@ export default function HourlyForecastCardSkeleton({
   isFocused,
 }: HourlyForecastCardSkeletonProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-lg flex flex-col grow">
+    <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm flex flex-col grow">
       {/* Header Skeleton */}
       <div className="mb-3">
         <div className="w-32 h-6 bg-gray-200 rounded animate-pulse"></div>

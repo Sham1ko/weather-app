@@ -29,7 +29,7 @@ export default function WeatherSearchForm({
 
   return (
     <form
-      className={`bg-white rounded-xl border border-gray-200 backdrop-blur-md shadow-md ${isSubmitted
+      className={`bg-surface rounded-2xl border border-line shadow-sm ${isSubmitted
           ? "w-full max-w-5xl flex flex-row items-center p-4 gap-4"
           : isFocused
             ? "max-w-md md:max-w-sm flex flex-col p-6"
