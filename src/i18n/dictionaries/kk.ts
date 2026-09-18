@@ -3,7 +3,7 @@ import type { Dictionary } from "./ru";
 // Переводы — рабочие формулировки; спорные места стоит прогнать
 // носителем (напр. «Ылғалдылық», «Күндік болжам»).
 const kk: Dictionary = {
-  "app.name": "Weather App",
+  "app.name": "Aspan",
   "header.home": "Басты бетке",
   "header.theme.light": "Ашық режимді қосу",
   "header.theme.dark": "Қараңғы режимді қосу",

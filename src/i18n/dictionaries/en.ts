@@ -1,7 +1,7 @@
 import type { Dictionary } from "./ru";
 
 const en: Dictionary = {
-  "app.name": "Weather App",
+  "app.name": "Aspan",
   "header.home": "Go home",
   "header.theme.light": "Switch to light theme",
   "header.theme.dark": "Switch to dark theme",

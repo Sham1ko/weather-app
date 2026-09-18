@@ -22,8 +22,8 @@ const themeInitScript = `
 `;
 
 export const metadata: Metadata = {
-  title: "Weather App",
-  description: "Created by Shamshyrak Zholdasbek",
+  title: "Aspan",
+  description: "Aspan — weather app created by Shamshyrak Zholdasbek",
 };
 
 export default function RootLayout({

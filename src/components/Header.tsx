@@ -41,7 +41,7 @@ function LogoButton({
     >
       <Logo className="h-8 w-8 shrink-0" />
       <span className="transition-colors group-hover:text-primary">
-        Weather App
+        {t("app.name")}
       </span>
     </button>
   );

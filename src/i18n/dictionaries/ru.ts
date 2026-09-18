@@ -1,7 +1,7 @@
 // Русский словарь — источник типов: ключи отсюда обязательны
 // в kk.ts и en.ts (проверяется компилятором).
 const ru = {
-  "app.name": "Weather App",
+  "app.name": "Aspan",
   "header.home": "На главную",
   "header.theme.light": "Включить светлую тему",
   "header.theme.dark": "Включить тёмную тему",
