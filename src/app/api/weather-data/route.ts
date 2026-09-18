@@ -19,14 +19,20 @@ export async function GET(request: NextRequest) {
   }
 
   const cacheKey = `weather:${city.toLowerCase()}`;
-  const cached = await safeRedisGet(cacheKey);
 
-  if (cached) {
-    console.log("Cached data found for city:", city);
-    return NextResponse.json({
-      ...JSON.parse(cached),
-      redisAvailable: isRedisAvailable(),
-    });
+  // refresh=1 — принудительное обновление по запросу пользователя:
+  // пропускаем свежий кэш, но после загрузки перезаписываем его
+  const bypassCache = searchParams.get("refresh") === "1";
+
+  if (!bypassCache) {
+    const cached = await safeRedisGet(cacheKey);
+    if (cached) {
+      console.log("Cached data found for city:", city);
+      return NextResponse.json({
+        ...JSON.parse(cached),
+        redisAvailable: isRedisAvailable(),
+      });
+    }
   }
 
   try {
@@ -55,15 +61,19 @@ export async function GET(request: NextRequest) {
     const weatherData = await weatherResponse.json();
     const forecastData = await forecastResponse.json();
 
+    // fetchedAt попадает в кэш, чтобы после cache-hit клиент знал возраст данных
+    const fetchedAt = Date.now();
     const payload = JSON.stringify({
       weather: weatherData,
       forecast: forecastData,
+      fetchedAt,
     });
     await cacheWeatherPayload(cacheKey, payload);
 
     return NextResponse.json({
       weather: weatherData,
       forecast: forecastData,
+      fetchedAt,
       redisAvailable: isRedisAvailable(),
       redisEnabled: isRedisEnabled(),
     });

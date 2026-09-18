@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Header from "@/components/Header";
 import PetProjectBadge from "@/components/PetProjectBadge";
 
-const montserrat = Montserrat({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
 export const metadata: Metadata = {
   title: "Weather App",
@@ -18,11 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ru">
       <head>
         <link rel="icon" href="/cloud.png" />
       </head>
-      <body className={montserrat.className}>
+      <body className={`${inter.className} bg-canvas text-ink`}>
         <div className="flex flex-col h-full lg:h-screen container mx-auto">
           <Header />
           {children}

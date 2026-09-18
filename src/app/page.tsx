@@ -51,10 +51,21 @@ export default function Home() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [redisAvailable, setRedisAvailable] = useState<boolean | null>(null);
   const [redisEnabled, setRedisEnabled] = useState<boolean | null>(null);
+  // Момент последнего обновления данных (timestamp из ответа API)
+  const [fetchedAt, setFetchedAt] = useState<number | null>(null);
 
-  const handleSearch = async (city: string) => {
+  const handleSearch = async (
+    city: string,
+    options?: { bypassCache?: boolean }
+  ) => {
     setLoading(true);
     setError(null);
+    // Сбрасываем данные прошлого запроса, чтобы при ошибке не показывать
+    // старый город вместе с сообщением об ошибке
+    setWeatherData(null);
+    setForecastData(null);
+    setHourlyData([]);
+    setFetchedAt(null);
     setIsSubmitted(true);
     setIsFocused(true); // Сразу устанавливаем фокус при начале загрузки
 
@@ -66,10 +77,13 @@ export default function Home() {
     }
 
     try {
-      // Загружаем данные о погоде и прогнозе одним запросом
-      const response = await fetch(
-        `/api/weather-data?city=${encodeURIComponent(city)}`
-      );
+      // Загружаем данные о погоде и прогнозе одним запросом;
+      // bypassCache=1 заставляет сервер игнорировать свежий кэш
+      const params = new URLSearchParams({ city });
+      if (options?.bypassCache) {
+        params.set("refresh", "1");
+      }
+      const response = await fetch(`/api/weather-data?${params.toString()}`);
 
       if (!response.ok) {
         throw new Error(getFriendlyErrorMessage(response.status));
@@ -78,12 +92,16 @@ export default function Home() {
       const {
         weather: weatherData,
         forecast: forecastData,
+        fetchedAt,
         redisAvailable: redisStatus,
         redisEnabled,
       } = await response.json();
 
       setWeatherData(weatherData);
       setForecastData(forecastData);
+      if (typeof fetchedAt === "number") {
+        setFetchedAt(fetchedAt);
+      }
       if (typeof redisStatus === "boolean") {
         setRedisAvailable(redisStatus);
       }
@@ -112,6 +130,13 @@ export default function Home() {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Обновление по кнопке в карточке: повторный запрос с обходом кэша
+  const handleRefresh = () => {
+    if (weatherData?.name && !loading) {
+      handleSearch(weatherData.name, { bypassCache: true });
     }
   };
 
@@ -146,7 +171,7 @@ export default function Home() {
       {error && (
         <div
           aria-live="polite"
-          className="max-w-3xl w-full md:max-w-lg flex flex-col bg-red-50 border border-red-200 rounded-xl p-4"
+          className="max-w-3xl w-full md:max-w-lg flex flex-col bg-red-50 border border-red-200 rounded-2xl p-4"
         >
           <p className="text-red-600 text-center">{error}</p>
         </div>
@@ -164,23 +189,21 @@ export default function Home() {
               windDeg={weatherData?.wind.deg ?? 0}
               description={weatherData?.weather[0].description || ""}
               icon={weatherData?.weather[0].icon || "01d"}
+              fetchedAt={fetchedAt}
+              onRefresh={handleRefresh}
               isVisible={isVisible}
               loading={loading}
             />
             <HourlyForecastCard
               isFocused={isFocused}
-              city={weatherData?.name || ""}
               loading={loading}
-              error={error}
               hourlyData={hourlyData}
             />
           </div>
           <div className="lg:w-1/3 flex flex-col">
             <MultiDayForecastCard
               isFocused={isFocused}
-              city={weatherData?.name || ""}
               loading={loading}
-              error={error}
               forecastData={forecastData}
             />
           </div>

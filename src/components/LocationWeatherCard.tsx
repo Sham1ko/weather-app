@@ -28,6 +28,8 @@ export default function LocationWeatherCard({
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Инкремент в обработчике «Повторить» запускает effect заново
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     const fetchWeatherByLocation = async () => {
@@ -61,11 +63,11 @@ export default function LocationWeatherCard({
     };
 
     fetchWeatherByLocation();
-  }, []);
+  }, [retryCount]);
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-md animate-pulse">
+      <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm animate-pulse">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-gray-200 rounded"></div>
           <div className="flex-1 space-y-2">
@@ -78,11 +80,34 @@ export default function LocationWeatherCard({
   }
 
   if (error || !weather) {
-    return null;
+    return (
+      <div
+        aria-live="polite"
+        className="bg-surface rounded-2xl border border-line p-5 shadow-sm"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-gray-800">
+              Не удалось определить город
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Разрешите доступ к геолокации или найдите город вручную
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setRetryCount((count) => count + 1)}
+            className="shrink-0 text-sm font-medium text-blue-600 hover:text-blue-800 focus:ring-4 focus:outline-hidden focus:ring-blue-300 rounded-lg px-3 py-2"
+          >
+            Повторить
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-md">
+    <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm">
       <div className="flex items-center gap-3">
         <div className="text-4xl" aria-hidden="true">
           {getWeatherIcon(weather.weather[0].icon)}

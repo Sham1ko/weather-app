@@ -6,17 +6,13 @@ import type { ForecastDayData } from "@/types/weather";
 
 interface MultiDayForecastCardProps {
   isFocused: boolean;
-  city: string;
   loading: boolean;
-  error: string | null;
   forecastData?: any;
 }
 
 export default function MultiDayForecastCard({
   isFocused,
-  city,
   loading,
-  error,
   forecastData: rawForecastData,
 }: MultiDayForecastCardProps) {
   const [forecastData, setForecastData] = useState<ForecastDayData[]>([]);
@@ -31,18 +27,8 @@ export default function MultiDayForecastCard({
     }
   }, [rawForecastData]);
 
-  if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-lg">
-        <div className="text-red-600 text-center py-2 text-sm">
-          Ошибка загрузки прогноза: {error}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-lg flex flex-col grow">
+    <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm flex flex-col grow">
       {/* Header */}
       <div className="mb-3">
         <h3

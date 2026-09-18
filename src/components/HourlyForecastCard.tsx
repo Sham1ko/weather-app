@@ -5,35 +5,21 @@ import type { HourlyForecast } from "@/types/weather";
 
 interface HourlyForecastCardProps {
   isFocused: boolean;
-  city: string;
   loading: boolean;
-  error: string | null;
   hourlyData?: HourlyForecast[];
 }
 
 export default function HourlyForecastCard({
   isFocused,
-  city,
   loading,
-  error,
   hourlyData = [],
 }: HourlyForecastCardProps) {
   if (loading) {
     return <HourlyForecastCardSkeleton isFocused={isFocused} />;
   }
 
-  if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-xl p-4 shadow-lg">
-        <div className="text-red-600 text-center py-2 text-sm">
-          Ошибка загрузки: {error}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-lg flex flex-col grow">
+    <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm flex flex-col grow">
       {/* Header */}
       <div className="mb-3">
         <h3

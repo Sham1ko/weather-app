@@ -1,6 +1,19 @@
 @import "tailwindcss";
 
 @theme {
+  /* ─── Дизайн-система: семантические токены (светлая тема) ────────────────
+     Значения держим рядом с ссылками на шкалу Tailwind, чтобы шаг 10
+     (тёмная тема) менял только значения ниже, а не классы компонентов. */
+  --color-canvas: #f4f4f5; /* фон страницы (zinc-100) */
+  --color-surface: #ffffff; /* карточки, инпуты */
+  --color-ink: #18181b; /* основной текст (zinc-900) */
+  --color-ink-secondary: #52525b; /* вторичный текст (zinc-600) */
+  --color-ink-muted: #a1a1aa; /* подписи, третьичный (zinc-400) */
+  --color-line: #e4e4e7; /* рамки (zinc-200) */
+  --color-primary: #4f46e5; /* акцент (indigo-600) */
+  --color-primary-strong: #4338ca; /* hover акцента (indigo-700) */
+  --color-primary-soft: #eef2ff; /* тинт акцента (indigo-50) */
+
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
   --background-image-gradient-conic: conic-gradient(
     from 180deg at 50% 50%,
@@ -8,29 +21,27 @@
   );
 }
 
-@theme {
-  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
-  --background-image-gradient-conic: conic-gradient(
-    from 180deg at 50% 50%,
-    var(--tw-gradient-stops)
-  );
-}
-
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+/* ─── Тёмная тема ─────────────────────────────────────────────────────────
+   Класс .dark ставится на <html> тумблером (шаг 10); до его появления
+   значения ниже — задел фундамента, компоненты их начнут использовать
+   по мере перевода на семантические классы. */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+
+    --color-canvas: #09090b; /* zinc-950 */
+    --color-surface: #18181b; /* zinc-900 */
+    --color-ink: #f4f4f5; /* zinc-100 */
+    --color-ink-secondary: #a1a1aa; /* zinc-400 */
+    --color-ink-muted: #71717a; /* zinc-500 */
+    --color-line: #27272a; /* zinc-800 */
+    --color-primary: #818cf8; /* indigo-400 — светлее для контраста */
+    --color-primary-strong: #6366f1; /* indigo-500 */
+    --color-primary-soft: #1e1b4b; /* индиго-тинт на тёмном (indigo-950) */
   }
 }
 

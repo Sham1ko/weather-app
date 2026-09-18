@@ -52,6 +52,23 @@ export function getWindDirection(deg: number): string {
   return points[Math.round(deg / 45) % 8];
 }
 
+// «Обновлено N минут назад» — склонение берёт на себя Intl.RelativeTimeFormat
+export function formatUpdatedAt(timestamp: number, now: number = Date.now()): string {
+  const minutes = Math.floor((now - timestamp) / 60_000);
+  if (minutes < 1) {
+    return "только что";
+  }
+  const rtf = new Intl.RelativeTimeFormat("ru", { numeric: "auto" });
+  if (minutes < 60) {
+    return rtf.format(-minutes, "minute");
+  }
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) {
+    return rtf.format(-hours, "hour");
+  }
+  return rtf.format(-Math.floor(hours / 24), "day");
+}
+
 export function processForecastData(
   apiData: OpenWeatherForecastResponse
 ): ForecastDayData[] {

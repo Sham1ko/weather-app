@@ -1,11 +1,12 @@
 export default function WeatherCardSkeleton() {
   return (
-    <div className="flex flex-col grow bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
+    <div className="flex flex-col grow bg-surface rounded-2xl border border-line p-5 shadow-sm">
       {/* Заголовок и иконка */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="w-48 h-5 bg-gray-200 rounded animate-pulse"></div>
           <div className="w-32 h-4 mt-1.5 bg-gray-200 rounded animate-pulse"></div>
+          <div className="w-24 h-3 mt-1 bg-gray-200 rounded animate-pulse"></div>
         </div>
         <div className="w-9 h-9 bg-gray-200 rounded-full animate-pulse"></div>
       </div>
