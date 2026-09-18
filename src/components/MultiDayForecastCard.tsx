@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import MultiDayForecastItem from "./MultiDayForecastItem";
 import MultiDayForecastItemSkeleton from "./MultiDayForecastItemSkeleton";
-import type { WeatherForecast } from "@/types/weather";
+import type { ForecastDayData } from "@/types/weather";
 
 interface MultiDayForecastCardProps {
   isFocused: boolean;
@@ -19,7 +19,7 @@ export default function MultiDayForecastCard({
   error,
   forecastData: rawForecastData,
 }: MultiDayForecastCardProps) {
-  const [forecastData, setForecastData] = useState<WeatherForecast[]>([]);
+  const [forecastData, setForecastData] = useState<ForecastDayData[]>([]);
 
   useEffect(() => {
     if (rawForecastData) {
@@ -50,7 +50,7 @@ export default function MultiDayForecastCard({
             isFocused ? "text-xl" : "text-lg"
           }`}
         >
-          Forecast
+          Прогноз на 5 дней
         </h3>
       </div>
 

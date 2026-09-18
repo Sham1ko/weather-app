@@ -1,6 +1,6 @@
 import {
   OpenWeatherForecastResponse,
-  WeatherForecast,
+  ForecastDayData,
   HourlyForecast,
 } from "@/types/weather";
 
@@ -30,9 +30,9 @@ export function getWeatherIcon(iconCode: string): string {
 
 export function formatDate(dateString: string): { date: string; day: string } {
   const date = new Date(dateString);
-  const month = date.toLocaleDateString("en", { month: "short" });
+  const month = date.toLocaleDateString("ru", { month: "short" });
   const day = date.getDate();
-  const dayName = date.toLocaleDateString("en", { weekday: "short" });
+  const dayName = date.toLocaleDateString("ru", { weekday: "short" });
 
   return {
     date: `${day} ${month}`,
@@ -42,7 +42,7 @@ export function formatDate(dateString: string): { date: string; day: string } {
 
 export function processForecastData(
   apiData: OpenWeatherForecastResponse
-): WeatherForecast[] {
+): ForecastDayData[] {
   // Группируем данные по дням
   const dailyData: { [key: string]: any[] } = {};
 
@@ -55,7 +55,7 @@ export function processForecastData(
   });
 
   // Преобразуем в наш формат
-  const forecast: WeatherForecast[] = Object.keys(dailyData)
+  const forecast: ForecastDayData[] = Object.keys(dailyData)
     .slice(0, 6) // Берем только первые 6 дней
     .map((date) => {
       const dayData = dailyData[date];

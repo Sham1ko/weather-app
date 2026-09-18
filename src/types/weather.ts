@@ -1,4 +1,4 @@
-export interface WeatherForecast {
+export interface ForecastDayData {
   date: string;
   day: string;
   icon: string;
@@ -15,7 +15,7 @@ export interface HourlyForecast {
 }
 
 export interface WeatherForecastData {
-  forecast: WeatherForecast[];
+  forecast: ForecastDayData[];
   isFocused: boolean;
 }
 
