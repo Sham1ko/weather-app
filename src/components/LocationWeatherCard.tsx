@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { capitalizeFirst, getWeatherIcon } from "@/utils/weatherUtils";
+import { capitalizeFirst } from "@/utils/weatherUtils";
+import WeatherIcon from "@/components/WeatherIcon";
 
 interface WeatherData {
   name: string;
@@ -109,8 +110,12 @@ export default function LocationWeatherCard({
   return (
     <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm">
       <div className="flex items-center gap-3">
-        <div className="text-4xl" aria-hidden="true">
-          {getWeatherIcon(weather.weather[0].icon)}
+        <div className="shrink-0" aria-hidden="true">
+          <WeatherIcon
+            code={weather.weather[0].icon}
+            size={40}
+            className="text-ink-secondary"
+          />
         </div>
         <div className="flex-1">
           <h3 className="font-medium text-lg">{weather.name}</h3>

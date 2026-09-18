@@ -1,12 +1,11 @@
 "use client";
-"use client";
 import { useEffect, useState } from "react";
 import {
   capitalizeFirst,
   formatUpdatedAt,
-  getWeatherIcon,
   getWindDirection,
 } from "@/utils/weatherUtils";
+import WeatherIcon from "@/components/WeatherIcon";
 import WeatherCardSkeleton from "@/components/WeatherCardSkeleton";
 
 interface WeatherCardProps {
@@ -90,8 +89,8 @@ export default function WeatherCard({
             </div>
           )}
         </div>
-        <div className="text-4xl leading-none shrink-0" aria-hidden="true">
-          {getWeatherIcon(icon)}
+        <div className="shrink-0" aria-hidden="true">
+          <WeatherIcon code={icon} size={40} className="text-ink-secondary" />
         </div>
       </div>
 

@@ -4,30 +4,6 @@ import {
   HourlyForecast,
 } from "@/types/weather";
 
-export function getWeatherIcon(iconCode: string): string {
-  const iconMap: { [key: string]: string } = {
-    "01d": "☀️", // clear sky day
-    "01n": "🌙", // clear sky night
-    "02d": "⛅", // few clouds day
-    "02n": "☁️", // few clouds night
-    "03d": "☁️", // scattered clouds
-    "03n": "☁️", // scattered clouds
-    "04d": "☁️", // broken clouds
-    "04n": "☁️", // broken clouds
-    "09d": "🌧️", // shower rain
-    "09n": "🌧️", // shower rain
-    "10d": "🌦️", // rain
-    "10n": "🌧️", // rain
-    "11d": "⛈️", // thunderstorm
-    "11n": "⛈️", // thunderstorm
-    "13d": "❄️", // snow
-    "13n": "❄️", // snow
-    "50d": "🌫️", // mist
-    "50n": "🌫️", // mist
-  };
-  return iconMap[iconCode] || "🌤️";
-}
-
 export function formatDate(dateString: string): { date: string; day: string } {
   const date = new Date(dateString);
   const month = date.toLocaleDateString("ru", { month: "short" });
@@ -103,7 +79,8 @@ export function processForecastData(
       return {
         date: formattedDate,
         day,
-        icon: getWeatherIcon(middayData.weather[0].icon),
+        // Сырой код иконки ("02d" и т.п.) — рендерит компонент WeatherIcon
+        icon: middayData.weather[0].icon,
         high: Math.round(maxTemp),
         low: Math.round(minTemp),
         description: middayData.weather[0].description,
@@ -128,7 +105,7 @@ export function processHourlyForecastData(
     return {
       time,
       temp: Math.round(item.main.temp),
-      icon: getWeatherIcon(item.weather[0].icon),
+      icon: item.weather[0].icon,
       description: item.weather[0].description,
     };
   });

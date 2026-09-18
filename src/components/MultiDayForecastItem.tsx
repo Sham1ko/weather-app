@@ -1,5 +1,7 @@
 "use client";
 
+import WeatherIcon from "@/components/WeatherIcon";
+
 interface MultiDayForecastItemProps {
   date: string;
   day: string;
@@ -29,7 +31,13 @@ export default function MultiDayForecastItem({
     >
       {/* Weather Icon */}
       <div className="flex items-center space-x-2.5">
-        <div className="text-xl leading-none" aria-hidden="true">{icon}</div>
+        <div aria-hidden="true">
+          <WeatherIcon
+            code={icon}
+            size={22}
+            className="text-ink-secondary"
+          />
+        </div>
         <div className="text-ink leading-tight">
           <div className="font-medium">{high}°</div>
           <div className="text-xs text-ink-secondary">{low}°</div>

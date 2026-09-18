@@ -1,6 +1,6 @@
 "use client";
-import { getWeatherIcon } from "@/utils/weatherUtils";
 import HourlyForecastCardSkeleton from "./HourlyForecastCardSkeleton";
+import WeatherIcon from "@/components/WeatherIcon";
 import type { HourlyForecast } from "@/types/weather";
 
 interface HourlyForecastCardProps {
@@ -40,8 +40,12 @@ export default function HourlyForecastCard({
               className="text-center p-1.5 rounded-lg"
             >
               <div className="text-xs text-gray-500 mb-0.5">{hour.time}</div>
-              <div className="text-xl leading-none mb-0.5" aria-hidden="true">
-                {getWeatherIcon(hour.icon)}
+              <div className="mb-0.5" aria-hidden="true">
+                <WeatherIcon
+                  code={hour.icon}
+                  size={22}
+                  className="text-ink-secondary mx-auto"
+                />
               </div>
               <div className="text-base font-semibold text-gray-800 leading-tight">
                 {hour.temp}°
