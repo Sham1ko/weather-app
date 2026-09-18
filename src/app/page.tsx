@@ -129,7 +129,8 @@ export default function Home() {
         </div>
       )}
 
-      {redisEnabled !== false && (
+      {/* Статус кэша показываем только после поиска: до него это шум для пользователя */}
+      {isSubmitted && redisEnabled !== false && (
         <RedisStatusBadge available={redisAvailable} />
       )}
 
