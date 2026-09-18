@@ -19,7 +19,6 @@ interface WeatherCardProps {
   icon: string;
   fetchedAt?: number | null;
   onRefresh?: () => void;
-  isVisible: boolean;
   loading: boolean;
 }
 
@@ -34,7 +33,6 @@ export default function WeatherCard({
   icon,
   fetchedAt,
   onRefresh,
-  isVisible,
   loading,
 }: WeatherCardProps) {
   // Тикаем каждые 30 секунд, чтобы «Обновлено N мин назад» не устаревало

@@ -7,24 +7,11 @@ import HourlyForecastCard from "@/components/HourlyForecastCard";
 import LocationWeatherCard from "@/components/LocationWeatherCard";
 import RedisStatusBadge from "@/components/RedisStatusBadge";
 import { processHourlyForecastData } from "@/utils/weatherUtils";
-import type { HourlyForecast } from "@/types/weather";
-
-interface WeatherData {
-  name: string;
-  main: {
-    temp: number;
-    feels_like: number;
-    humidity: number;
-  };
-  weather: Array<{
-    description: string;
-    icon: string;
-  }>;
-  wind: {
-    speed: number;
-    deg: number;
-  };
-}
+import type {
+  HourlyForecast,
+  OpenWeatherCurrentResponse,
+  OpenWeatherForecastResponse,
+} from "@/types/weather";
 
 // Переводит код ответа API в понятный текст с подсказкой, что делать дальше
 function getFriendlyErrorMessage(status: number): string {
@@ -41,10 +28,11 @@ function getFriendlyErrorMessage(status: number): string {
 }
 
 export default function Home() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [weatherData, setWeatherData] =
+    useState<OpenWeatherCurrentResponse | null>(null);
   const [hourlyData, setHourlyData] = useState<HourlyForecast[]>([]);
-  const [forecastData, setForecastData] = useState<any>(null);
+  const [forecastData, setForecastData] =
+    useState<OpenWeatherForecastResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -68,13 +56,6 @@ export default function Home() {
     setFetchedAt(null);
     setIsSubmitted(true);
     setIsFocused(true); // Сразу устанавливаем фокус при начале загрузки
-
-    // Сразу показываем карточку погоды при начале загрузки
-    if (!isVisible) {
-      setTimeout(() => {
-        setIsVisible(true);
-      }, 100);
-    }
 
     try {
       // Загружаем данные о погоде и прогнозе одним запросом;
@@ -112,8 +93,6 @@ export default function Home() {
       // Обрабатываем данные почасового прогноза
       const processedHourlyData = processHourlyForecastData(forecastData);
       setHourlyData(processedHourlyData);
-
-      // isVisible уже установлен в начале функции
     } catch (error) {
       console.error("Ошибка при получении данных о погоде:", error);
       if (error instanceof TypeError) {
@@ -208,7 +187,6 @@ export default function Home() {
               icon={weatherData?.weather[0].icon || "01d"}
               fetchedAt={fetchedAt}
               onRefresh={handleRefresh}
-              isVisible={isVisible}
               loading={loading}
             />
             <HourlyForecastCard

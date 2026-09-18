@@ -14,9 +14,22 @@ export interface HourlyForecast {
   description: string;
 }
 
-export interface WeatherForecastData {
-  forecast: ForecastDayData[];
-  isFocused: boolean;
+// Форма ответа OpenWeather /weather, используемая приложением (подмножество)
+export interface OpenWeatherCurrentResponse {
+  name: string;
+  main: {
+    temp: number;
+    feels_like: number;
+    humidity: number;
+  };
+  weather: Array<{
+    description: string;
+    icon: string;
+  }>;
+  wind: {
+    speed: number;
+    deg: number;
+  };
 }
 
 // OpenWeatherMap API Response Types

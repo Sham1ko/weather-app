@@ -17,7 +17,6 @@
     "framer-motion": "^12.0.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "swr": "^2.5.1",
     "weather-app": "file:"
   },
   "devDependencies": {

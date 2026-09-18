@@ -2,12 +2,12 @@
 import { useState, useEffect } from "react";
 import MultiDayForecastItem from "./MultiDayForecastItem";
 import MultiDayForecastItemSkeleton from "./MultiDayForecastItemSkeleton";
-import type { ForecastDayData } from "@/types/weather";
+import type { ForecastDayData, OpenWeatherForecastResponse } from "@/types/weather";
 
 interface MultiDayForecastCardProps {
   isFocused: boolean;
   loading: boolean;
-  forecastData?: any;
+  forecastData?: OpenWeatherForecastResponse | null;
 }
 
 export default function MultiDayForecastCard({
