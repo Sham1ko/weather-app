@@ -86,7 +86,8 @@ export function processForecastData(
   // Преобразуем в наш формат
   const forecast: ForecastDayData[] = Object.keys(dailyData)
     .sort()
-    .slice(0, 6) // Берем только первые 6 дней
+    .slice(0, 5) // Ровно 5 строк под заголовок «Прогноз на 5 дней»;
+    // частичный хвостовой день из окна API не показываем
     .map((key) => {
       const dayData = dailyData[key];
       const maxTemp = Math.max(...dayData.map((item) => item.main.temp_max));

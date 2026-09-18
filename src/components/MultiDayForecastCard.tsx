@@ -40,11 +40,12 @@ export default function MultiDayForecastCard({
         </h3>
       </div>
 
-      {/* Forecast List */}
-      <div className="flex flex-col gap-2">
+      {/* Forecast List: строки распределяются по высоте карточки,
+          чтобы низ был выровнен с левой колонкой без пустого места */}
+      <div className="flex flex-col justify-between gap-2 grow">
         {loading
           ? // Показываем skeleton во время загрузки
-            Array.from({ length: 6 }).map((_, index) => (
+            Array.from({ length: 5 }).map((_, index) => (
               <MultiDayForecastItemSkeleton
                 key={`skeleton-${index}`}
                 isSelected={index === 0}

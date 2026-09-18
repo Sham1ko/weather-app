@@ -5,12 +5,9 @@
 ▲ Next.js 16.3.2
 - Local:         http://localhost:3000
 - Network:       http://169.254.83.107:3000
-✓ Ready in 374ms
+✓ Ready in 370ms
 ✓ Running next.config.mjs took 48ms
 Cached data found for city: Костанай
 Cached data found for city: Almaty
+Cached data found for city: Almaty
 Cached data found for city: Алматы
-Cached data found for city: Костанай
-Cached data found for city: Берлин
-Cached data found for city: Костанай
-Cached data found for city: Тула
