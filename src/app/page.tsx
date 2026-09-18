@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "@/components/Header";
 import WeatherCard from "@/components/WeatherCard";
 import WeatherSearchForm from "@/components/WeatherSearchForm";
@@ -13,6 +13,15 @@ import type {
   OpenWeatherCurrentResponse,
   OpenWeatherForecastResponse,
 } from "@/types/weather";
+
+// Обновляет адрес страницы, не создавая дубликаты в истории:
+// повторный поиск и кнопка «Обновить» URL не меняют
+function syncUrl(city: string | null) {
+  const url = city ? `/?city=${encodeURIComponent(city)}` : "/";
+  if (window.location.pathname + window.location.search !== url) {
+    window.history.pushState(null, "", url);
+  }
+}
 
 // Переводит код ответа API в понятный текст с подсказкой, что делать дальше
 function getFriendlyErrorMessage(status: number): string {
@@ -32,6 +41,8 @@ export default function Home() {
   // nonce меняется при сбросе на главную, чтобы перемонтировать форму
   // и очистить введённый город
   const [searchNonce, setSearchNonce] = useState(0);
+  // Город, который сейчас показан: источник сравнения для URL-навигации
+  const currentCityRef = useRef<string | null>(null);
   const [weatherData, setWeatherData] =
     useState<OpenWeatherCurrentResponse | null>(null);
   const [hourlyData, setHourlyData] = useState<HourlyForecast[]>([]);
@@ -52,6 +63,8 @@ export default function Home() {
   ) => {
     setLoading(true);
     setError(null);
+    currentCityRef.current = city;
+    syncUrl(city);
     // Сбрасываем данные прошлого запроса, чтобы при ошибке не показывать
     // старый город вместе с сообщением об ошибке
     setWeatherData(null);
@@ -127,6 +140,8 @@ export default function Home() {
   const handleHomeClick = () => {
     setLoading(false);
     setError(null);
+    currentCityRef.current = null;
+    syncUrl(null);
     setWeatherData(null);
     setForecastData(null);
     setHourlyData([]);
@@ -137,6 +152,27 @@ export default function Home() {
     setRedisEnabled(null);
     setSearchNonce((nonce) => nonce + 1);
   };
+
+  // URL — источник правды для навигации: шареная ссылка запускает поиск,
+  // назад/вперёд переключают города, сброс лого возвращает на "/"
+  useEffect(() => {
+    const applyUrl = () => {
+      const city = new URLSearchParams(window.location.search).get("city");
+      if (city && city !== currentCityRef.current) {
+        currentCityRef.current = city;
+        handleSearch(city);
+      } else if (!city && currentCityRef.current !== null) {
+        currentCityRef.current = null;
+        handleHomeClick();
+      }
+    };
+
+    applyUrl();
+    window.addEventListener("popstate", applyUrl);
+    return () => window.removeEventListener("popstate", applyUrl);
+    // handleSearch/handleHomeClick читают только сеттеры и ref —
+    // замыкание первого рендера не устаревает
+  }, []);
 
   return (
     <>

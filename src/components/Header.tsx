@@ -13,7 +13,6 @@ export default function Header({ onHomeClick, loading }: HeaderProps) {
         <button
           type="button"
           onClick={onHomeClick}
-          aria-label="На главную"
           title="На главную"
           disabled={loading}
           className="group flex items-center gap-2.5 rounded-xl transition-transform duration-200 hover:scale-105 focus-visible:ring-4 focus-visible:outline-hidden focus-visible:ring-indigo-300 disabled:cursor-not-allowed disabled:opacity-50"
