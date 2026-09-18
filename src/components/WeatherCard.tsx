@@ -1,5 +1,5 @@
 "use client";
-import { getWeatherIcon } from "@/utils/weatherUtils";
+import { capitalizeFirst, getWeatherIcon } from "@/utils/weatherUtils";
 import WeatherCardSkeleton from "@/components/WeatherCardSkeleton";
 
 interface WeatherCardProps {
@@ -33,10 +33,10 @@ export default function WeatherCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h2 className="font-semibold text-lg text-gray-900 truncate">
-            Weather in {city}
+            {city}
           </h2>
-          <p className="text-sm text-gray-500 capitalize truncate">
-            {description}
+          <p className="text-sm text-gray-500 truncate">
+            {capitalizeFirst(description)}
           </p>
         </div>
         <div className="text-4xl leading-none shrink-0">
@@ -52,16 +52,16 @@ export default function WeatherCard({
         <div className="flex gap-2">
           <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-1.5 text-center">
             <div className="text-[11px] text-gray-500 leading-tight">
-              Humidity
+              Влажность
             </div>
             <div className="text-sm font-medium text-gray-800">
               {humidity}%
             </div>
           </div>
           <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-1.5 text-center">
-            <div className="text-[11px] text-gray-500 leading-tight">Wind</div>
+            <div className="text-[11px] text-gray-500 leading-tight">Ветер</div>
             <div className="text-sm font-medium text-gray-800">
-              {Math.round(windSpeed * 3.6)} km/h
+              {Math.round(windSpeed * 3.6)} км/ч
             </div>
           </div>
         </div>

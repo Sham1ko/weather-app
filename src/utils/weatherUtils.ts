@@ -40,6 +40,12 @@ export function formatDate(dateString: string): { date: string; day: string } {
   };
 }
 
+// Делает заглавной только первую букву. CSS-класс capitalize для русского
+// текста не годится: он делает заглавной каждую букву («Облачно С Прояснениями»).
+export function capitalizeFirst(text: string): string {
+  return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
+}
+
 export function processForecastData(
   apiData: OpenWeatherForecastResponse
 ): ForecastDayData[] {
