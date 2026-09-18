@@ -24,6 +24,20 @@ interface WeatherData {
   };
 }
 
+// Переводит код ответа API в понятный текст с подсказкой, что делать дальше
+function getFriendlyErrorMessage(status: number): string {
+  if (status === 404) {
+    return "Город не найден. Проверьте название и попробуйте ещё раз.";
+  }
+  if (status === 429) {
+    return "Слишком много запросов к сервису погоды. Подождите немного и попробуйте ещё раз.";
+  }
+  if (status >= 500) {
+    return "Сервис погоды временно недоступен. Попробуйте ещё раз чуть позже.";
+  }
+  return "Не удалось получить погоду. Попробуйте ещё раз чуть позже.";
+}
+
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
@@ -56,8 +70,7 @@ export default function Home() {
       );
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Ошибка API: ${response.status}`);
+        throw new Error(getFriendlyErrorMessage(response.status));
       }
 
       const {
@@ -83,11 +96,18 @@ export default function Home() {
       // isVisible уже установлен в начале функции
     } catch (error) {
       console.error("Ошибка при получении данных о погоде:", error);
-      setError(
-        error instanceof Error
-          ? error.message
-          : "Произошла ошибка при загрузке данных"
-      );
+      if (error instanceof TypeError) {
+        // fetch бросает TypeError при сетевой ошибке (нет соединения и т.п.)
+        setError(
+          "Нет соединения с сервером. Проверьте подключение к интернету и попробуйте ещё раз."
+        );
+      } else if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError(
+          "Что-то пошло не так при загрузке погоды. Попробуйте ещё раз чуть позже."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -121,7 +141,10 @@ export default function Home() {
       />
 
       {error && (
-        <div className="max-w-3xl w-full md:max-w-lg flex flex-col bg-red-50 border border-red-200 rounded-xl p-4">
+        <div
+          aria-live="polite"
+          className="max-w-3xl w-full md:max-w-lg flex flex-col bg-red-50 border border-red-200 rounded-xl p-4"
+        >
           <p className="text-red-600 text-center">{error}</p>
         </div>
       )}
