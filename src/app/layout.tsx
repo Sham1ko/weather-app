@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import PetProjectBadge from "@/components/PetProjectBadge";
+import { LocaleProvider } from "@/i18n/LocaleProvider";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
@@ -46,10 +47,12 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className={`${inter.className} bg-canvas text-ink`}>
-        <div className="flex flex-col h-full lg:h-screen container mx-auto">
-          {children}
-          <PetProjectBadge />
-        </div>
+        <LocaleProvider>
+          <div className="flex flex-col h-full lg:h-screen container mx-auto">
+            {children}
+            <PetProjectBadge />
+          </div>
+        </LocaleProvider>
         <Analytics />
       </body>
     </html>

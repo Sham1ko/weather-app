@@ -1,3 +1,6 @@
+"use client";
+import { useI18n } from "@/i18n/LocaleProvider";
+
 interface RedisStatusBadgeProps {
   available: boolean | null;
 }
@@ -5,6 +8,7 @@ interface RedisStatusBadgeProps {
 export default function RedisStatusBadge({
   available,
 }: RedisStatusBadgeProps) {
+  const { t } = useI18n();
   if (available !== false) {
     return null;
   }
@@ -28,7 +32,7 @@ export default function RedisStatusBadge({
         <path d="M12 9v4" />
         <path d="M12 17h.01" />
       </svg>
-      <span>Кэш недоступен, данные могут загружаться медленнее</span>
+      <span>{t("redis.unavailable")}</span>
     </div>
   );
 }

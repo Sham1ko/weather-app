@@ -22,6 +22,15 @@ export class WeatherServiceUnavailableError extends Error {
 }
 
 /**
+ * Язык описаний погоды для OpenWeather: из поддерживаемых API языков
+ * в приложении используются ru и en; казахского (kk) в списке API нет —
+ * для него отдаём английские описания.
+ */
+export function resolveApiLang(raw: string | null): "ru" | "en" {
+  return raw === "ru" ? "ru" : "en";
+}
+
+/**
  * Запрос к OpenWeatherMap с таймаутом и типизированной сетевой ошибкой.
  * Ответы API с любым HTTP-статусом возвращаются как есть — их обрабатывает маршрут.
  */
@@ -40,7 +49,7 @@ export async function fetchOpenWeather(
   }
   url.searchParams.set("appid", apiKey);
   url.searchParams.set("units", "metric");
-  url.searchParams.set("lang", "ru");
+  url.searchParams.set("lang", params.lang ?? "ru");
 
   try {
     return await fetch(url, {

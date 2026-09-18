@@ -1,6 +1,7 @@
 import {
   cacheWeatherPayload,
   fetchOpenWeather,
+  resolveApiLang,
   respondWithWeatherError,
 } from "@/lib/openweather";
 import {
@@ -18,7 +19,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Город не указан" }, { status: 400 });
   }
 
-  const cacheKey = `weather:${city.toLowerCase()}`;
+  const cacheKey = `weather:${city.toLowerCase()}:${resolveApiLang(
+    searchParams.get("lang")
+  )}`;
 
   // refresh=1 — принудительное обновление по запросу пользователя:
   // пропускаем свежий кэш, но после загрузки перезаписываем его
@@ -38,8 +41,14 @@ export async function GET(request: NextRequest) {
   try {
     // Загружаем данные о погоде и прогнозе параллельно
     const [weatherResponse, forecastResponse] = await Promise.all([
-      fetchOpenWeather("/weather", { q: city }),
-      fetchOpenWeather("/forecast", { q: city }),
+      fetchOpenWeather("/weather", {
+        q: city,
+        lang: resolveApiLang(searchParams.get("lang")),
+      }),
+      fetchOpenWeather("/forecast", {
+        q: city,
+        lang: resolveApiLang(searchParams.get("lang")),
+      }),
     ]);
 
     if (!weatherResponse.ok) {

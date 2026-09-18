@@ -1,6 +1,7 @@
 import {
   cacheWeatherPayload,
   fetchOpenWeather,
+  resolveApiLang,
   respondWithWeatherError,
 } from "@/lib/openweather";
 import {
@@ -16,8 +17,9 @@ export async function GET(request: NextRequest) {
 
   // Если город не определен, используем Алматы по умолчанию
   const targetCity = city || "Almaty";
+  const lang = resolveApiLang(request.nextUrl.searchParams.get("lang"));
 
-  const cacheKey = `weatherByLocation:${targetCity.toLowerCase()}`;
+  const cacheKey = `weatherByLocation:${targetCity.toLowerCase()}:${lang}`;
 
   try {
     const cached = await safeRedisGet(cacheKey);
@@ -34,6 +36,7 @@ export async function GET(request: NextRequest) {
     // Получаем только текущую погоду (без прогноза)
     const weatherResponse = await fetchOpenWeather("/weather", {
       q: targetCity,
+      lang,
     });
 
     if (!weatherResponse.ok) {
@@ -41,6 +44,7 @@ export async function GET(request: NextRequest) {
       if (city && city !== "Алматы") {
         const almatyResponse = await fetchOpenWeather("/weather", {
           q: "Алматы",
+          lang,
         });
         if (almatyResponse.ok) {
           const weatherData = await almatyResponse.json();

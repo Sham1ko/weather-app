@@ -7,6 +7,7 @@ import {
 } from "@/utils/weatherUtils";
 import WeatherIcon from "@/components/WeatherIcon";
 import WeatherCardSkeleton from "@/components/WeatherCardSkeleton";
+import { useI18n } from "@/i18n/LocaleProvider";
 
 interface WeatherCardProps {
   city: string;
@@ -41,6 +42,7 @@ export default function WeatherCard({
     const id = setInterval(() => setNow(Date.now()), 30_000);
     return () => clearInterval(id);
   }, []);
+  const { locale, t } = useI18n();
   if (loading) {
     return <WeatherCardSkeleton />;
   }
@@ -58,13 +60,22 @@ export default function WeatherCard({
           </p>
           {typeof fetchedAt === "number" && (
             <div className="flex items-center gap-1 mt-1 text-xs text-ink-muted">
-              <span>Обновлено {formatUpdatedAt(fetchedAt, now)}</span>
+              <span>
+                {t("weather.updated", {
+                  t: formatUpdatedAt(
+                    fetchedAt,
+                    locale,
+                    t("weather.updatedJustNow"),
+                    now
+                  ),
+                })}
+              </span>
               {onRefresh && (
                 <button
                   type="button"
                   onClick={onRefresh}
-                  aria-label="Обновить данные"
-                  title="Обновить"
+                  aria-label={t("weather.refresh")}
+                  title={t("weather.refresh")}
                   className="rounded p-0.5 text-ink-muted hover:text-ink-secondary focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-indigo-300"
                 >
                   <svg
@@ -99,7 +110,7 @@ export default function WeatherCard({
             {Math.round(temperature)}°C
           </div>
           <div className="text-sm text-ink-secondary mt-1.5 tabular-nums">
-            Ощущается как {Math.round(feelsLike)}°
+            {t("weather.feelsLike", { t: Math.round(feelsLike) })}
           </div>
         </div>
         <div className="flex gap-2">
@@ -120,7 +131,7 @@ export default function WeatherCard({
               >
                 <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7Z" />
               </svg>
-              Влажность
+              {t("weather.humidity")}
             </div>
             <div className="text-sm font-medium text-ink tabular-nums">
               {humidity}%
@@ -145,10 +156,11 @@ export default function WeatherCard({
                 <path d="M9.6 4.6A2 2 0 1 1 11 8H2" />
                 <path d="M12.6 19.4A2 2 0 1 0 14 16H2" />
               </svg>
-              Ветер
+              {t("weather.wind")}
             </div>
             <div className="text-sm font-medium text-ink tabular-nums">
-              {Math.round(windSpeed * 3.6)} км/ч {getWindDirection(windDeg)}
+              {Math.round(windSpeed * 3.6)} {t("weather.windUnit")}{" "}
+              {getWindDirection(windDeg, locale)}
             </div>
           </div>
         </div>

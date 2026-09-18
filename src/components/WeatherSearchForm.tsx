@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useI18n } from "@/i18n/LocaleProvider";
 
 interface WeatherSearchFormProps {
   onSearch: (city: string) => void;
@@ -15,6 +16,7 @@ export default function WeatherSearchForm({
   isSubmitted,
 }: WeatherSearchFormProps) {
   const [city, setCity] = useState("");
+  const { t } = useI18n();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCity(event.target.value);
@@ -44,20 +46,20 @@ export default function WeatherSearchForm({
           htmlFor="large-input"
           className="flex justify-center text-4xl mb-5"
         >
-          Поиск города
+          {t("search.label")}
         </label>
       )}
 
       <input
         type="text"
         id="large-input"
-        aria-label="Поиск города"
+        aria-label={t("search.label")}
         autoComplete="off"
         spellCheck={false}
         enterKeyHint="search"
         className={`border border-zinc-300 dark:border-zinc-600 bg-surface rounded-[10px] transition-colors focus:outline-hidden focus:border-primary focus:ring-4 focus:ring-primary-soft disabled:bg-zinc-50 dark:disabled:bg-zinc-800 disabled:cursor-not-allowed ${isSubmitted ? "flex-1 p-3" : "p-4"
           }`}
-        placeholder="Например, Алматы…"
+        placeholder={t("search.placeholder")}
         value={city}
         onChange={handleChange}
         disabled={loading}
@@ -92,10 +94,10 @@ export default function WeatherSearchForm({
                   d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                 />
               </svg>
-              Загрузка…
+              {t("search.loading")}
             </>
           ) : (
-            "Найти"
+            t("search.button")
           )}
         </button>
       </div>

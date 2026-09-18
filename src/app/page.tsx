@@ -7,6 +7,7 @@ import MultiDayForecastCard from "@/components/MultiDayForecastCard";
 import HourlyForecastCard from "@/components/HourlyForecastCard";
 import LocationWeatherCard from "@/components/LocationWeatherCard";
 import RedisStatusBadge from "@/components/RedisStatusBadge";
+import { useI18n } from "@/i18n/LocaleProvider";
 import { processHourlyForecastData } from "@/utils/weatherUtils";
 import type {
   HourlyForecast,
@@ -23,33 +24,46 @@ function syncUrl(city: string | null) {
   }
 }
 
-// Переводит код ответа API в понятный текст с подсказкой, что делать дальше
-function getFriendlyErrorMessage(status: number): string {
+// Ключи словаря с текстами ошибок: храним ключ, а не текст —
+// формулировка берётся на языке интерфейса в момент отрисовки
+type ErrorKey =
+  | "error.notFound"
+  | "error.rateLimited"
+  | "error.unavailable"
+  | "error.generic"
+  | "error.connection"
+  | "error.unknown";
+
+// Переводит код ответа API в ключ словаря с подсказкой, что делать дальше
+function getErrorKey(status: number): ErrorKey {
   if (status === 404) {
-    return "Город не найден. Проверьте название и попробуйте ещё раз.";
+    return "error.notFound";
   }
   if (status === 429) {
-    return "Слишком много запросов к сервису погоды. Подождите немного и попробуйте ещё раз.";
+    return "error.rateLimited";
   }
   if (status >= 500) {
-    return "Сервис погоды временно недоступен. Попробуйте ещё раз чуть позже.";
+    return "error.unavailable";
   }
-  return "Не удалось получить погоду. Попробуйте ещё раз чуть позже.";
+  return "error.generic";
 }
 
 export default function Home() {
+  const { locale, t } = useI18n();
   // nonce меняется при сбросе на главную, чтобы перемонтировать форму
   // и очистить введённый город
   const [searchNonce, setSearchNonce] = useState(0);
   // Город, который сейчас показан: источник сравнения для URL-навигации
   const currentCityRef = useRef<string | null>(null);
+  // Зеркало локали для обработчиков, живущих вне рендера
+  const localeRef = useRef(locale);
   const [weatherData, setWeatherData] =
     useState<OpenWeatherCurrentResponse | null>(null);
   const [hourlyData, setHourlyData] = useState<HourlyForecast[]>([]);
   const [forecastData, setForecastData] =
     useState<OpenWeatherForecastResponse | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ErrorKey | null>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [redisAvailable, setRedisAvailable] = useState<boolean | null>(null);
@@ -78,13 +92,15 @@ export default function Home() {
       // Загружаем данные о погоде и прогнозе одним запросом;
       // bypassCache=1 заставляет сервер игнорировать свежий кэш
       const params = new URLSearchParams({ city });
+      params.set("lang", localeRef.current);
       if (options?.bypassCache) {
         params.set("refresh", "1");
       }
       const response = await fetch(`/api/weather-data?${params.toString()}`);
 
       if (!response.ok) {
-        throw new Error(getFriendlyErrorMessage(response.status));
+        setError(getErrorKey(response.status));
+        return;
       }
 
       const {
@@ -108,21 +124,18 @@ export default function Home() {
       }
 
       // Обрабатываем данные почасового прогноза
-      const processedHourlyData = processHourlyForecastData(forecastData);
+      const processedHourlyData = processHourlyForecastData(
+        forecastData,
+        localeRef.current
+      );
       setHourlyData(processedHourlyData);
     } catch (error) {
       console.error("Ошибка при получении данных о погоде:", error);
       if (error instanceof TypeError) {
         // fetch бросает TypeError при сетевой ошибке (нет соединения и т.п.)
-        setError(
-          "Нет соединения с сервером. Проверьте подключение к интернету и попробуйте ещё раз."
-        );
-      } else if (error instanceof Error) {
-        setError(error.message);
+        setError("error.connection");
       } else {
-        setError(
-          "Что-то пошло не так при загрузке погоды. Попробуйте ещё раз чуть позже."
-        );
+        setError("error.unknown");
       }
     } finally {
       setLoading(false);
@@ -173,6 +186,20 @@ export default function Home() {
     // handleSearch/handleHomeClick читают только сеттеры и ref —
     // замыкание первого рендера не устаревает
   }, []);
+
+  // Обновляем ref для обработчиков, живущих вне рендера
+  useEffect(() => {
+    localeRef.current = locale;
+  }, [locale]);
+
+  // Смена языка: перезапрашиваем текущий город, чтобы описания API
+  // пришли на новом языке (из Redis-кэша — мгновенно)
+  useEffect(() => {
+    if (currentCityRef.current) {
+      handleSearch(currentCityRef.current);
+    }
+    // handleSearch читает только сеттеры и ref — замыкание не устаревает
+  }, [locale]);
 
   return (
     <>
@@ -226,7 +253,7 @@ export default function Home() {
             <line x1="12" x2="12" y1="8" y2="12" />
             <line x1="12" x2="12.01" y1="16" y2="16" />
           </svg>
-          <p className="text-rose-600 dark:text-rose-400 text-sm">{error}</p>
+          <p className="text-rose-600 dark:text-rose-400 text-sm">{t(error)}</p>
         </div>
       )}
 

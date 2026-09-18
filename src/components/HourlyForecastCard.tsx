@@ -1,6 +1,7 @@
 "use client";
 import HourlyForecastCardSkeleton from "./HourlyForecastCardSkeleton";
 import WeatherIcon from "@/components/WeatherIcon";
+import { useI18n } from "@/i18n/LocaleProvider";
 import type { HourlyForecast } from "@/types/weather";
 
 interface HourlyForecastCardProps {
@@ -14,6 +15,7 @@ export default function HourlyForecastCard({
   loading,
   hourlyData = [],
 }: HourlyForecastCardProps) {
+  const { t } = useI18n();
   if (loading) {
     return <HourlyForecastCardSkeleton isFocused={isFocused} />;
   }
@@ -27,7 +29,7 @@ export default function HourlyForecastCard({
             isFocused ? "text-xl" : "text-lg"
           }`}
         >
-          Прогноз на день
+          {t("forecast.daily")}
         </h3>
       </div>
 
@@ -75,10 +77,10 @@ export default function HourlyForecastCard({
             <polyline points="12 6 12 12 16 14" />
           </svg>
           <p className="text-sm font-medium text-ink">
-            Нет данных о почасовом прогнозе
+            {t("hourly.emptyTitle")}
           </p>
           <p className="text-xs text-ink-muted">
-            Попробуйте обновить данные позже
+            {t("hourly.emptyHint")}
           </p>
         </div>
       )}

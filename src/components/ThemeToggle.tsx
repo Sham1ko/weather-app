@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useSyncExternalStore } from "react";
+import { useI18n } from "@/i18n/LocaleProvider";
 
 type Theme = "light" | "dark";
 
@@ -36,12 +37,13 @@ export default function ThemeToggle() {
   }, []);
 
   const isDark = theme === "dark";
+  const { t } = useI18n();
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label={isDark ? "Включить светлую тему" : "Включить тёмную тему"}
-      title={isDark ? "Светлая тема" : "Тёмная тема"}
+      aria-label={t(isDark ? "header.theme.light" : "header.theme.dark")}
+      title={t(isDark ? "header.theme.light" : "header.theme.dark")}
       className="inline-flex items-center justify-center rounded-[10px] p-2 text-ink-secondary hover:text-ink hover:bg-line transition-colors focus-visible:ring-4 focus-visible:outline-hidden focus-visible:ring-indigo-300"
     >
       {theme === null ? (

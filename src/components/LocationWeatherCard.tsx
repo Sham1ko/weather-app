@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { capitalizeFirst } from "@/utils/weatherUtils";
 import WeatherIcon from "@/components/WeatherIcon";
+import { useI18n } from "@/i18n/LocaleProvider";
 
 interface WeatherData {
   name: string;
@@ -26,6 +27,7 @@ interface LocationWeatherCardProps {
 export default function LocationWeatherCard({
   onRedisStatus,
 }: LocationWeatherCardProps) {
+  const { locale, t } = useI18n();
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +41,7 @@ export default function LocationWeatherCard({
         setError(null);
 
         // Используем Vercel geolocation для определения города пользователя
-        const response = await fetch("/api/weather-by-location");
+        const response = await fetch(`/api/weather-by-location?lang=${locale}`);
 
         if (!response.ok) {
           setError("Не удалось загрузить погоду");
@@ -64,7 +66,9 @@ export default function LocationWeatherCard({
     };
 
     fetchWeatherByLocation();
-  }, [retryCount]);
+    // locale: при смене языка перезапрашиваем, чтобы описания
+    // пришли на новом языке
+  }, [retryCount, locale]);
 
   if (loading) {
     return (
@@ -105,16 +109,16 @@ export default function LocationWeatherCard({
           <circle cx="12" cy="10" r="3" />
           <path d="m2 2 20 20" />
         </svg>
-        <p className="font-medium text-ink">Не удалось определить город</p>
+        <p className="font-medium text-ink">{t("location.failedTitle")}</p>
         <p className="text-sm text-ink-secondary">
-          Разрешите доступ к геолокации или найдите город вручную
+          {t("location.failedHint")}
         </p>
         <button
           type="button"
           onClick={() => setRetryCount((count) => count + 1)}
           className="mt-1 inline-flex items-center justify-center bg-primary hover:bg-primary-strong text-white font-medium rounded-[10px] transition-colors focus-visible:ring-4 focus-visible:outline-hidden focus-visible:ring-indigo-300 text-sm px-4 py-2"
         >
-          Повторить
+          {t("location.retry")}
         </button>
       </div>
     );

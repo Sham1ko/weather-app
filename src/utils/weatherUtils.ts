@@ -4,15 +4,16 @@ import {
   HourlyForecast,
 } from "@/types/weather";
 
-export function formatDate(date: Date): { date: string; day: string } {
+export function formatDate(date: Date, locale: string): { date: string; day: string } {
   // date уже сдвинута в рамку города: форматируем как UTC, чтобы
   // toLocaleDateString не сдвинул её обратно в часовой пояс зрителя
-  const month = date.toLocaleDateString("ru", {
+  const intlLocale = resolveIntlLocale(locale);
+  const month = date.toLocaleDateString(intlLocale, {
     month: "short",
     timeZone: "UTC",
   });
   const day = date.getUTCDate();
-  const dayName = date.toLocaleDateString("ru", {
+  const dayName = date.toLocaleDateString(intlLocale, {
     weekday: "short",
     timeZone: "UTC",
   });
@@ -29,19 +30,48 @@ export function capitalizeFirst(text: string): string {
   return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
 }
 
-// Румбы ветра: API отдаёт угол в градусах (откуда дует ветер), 8 румбов
-export function getWindDirection(deg: number): string {
-  const points = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"];
+// Румбы ветра: API отдаёт угол в градусах (откуда дует ветер), 8 румбов.
+// Казахские сокращения (С/СШ/Ш/ОШ/О/ОБ/Б/СБ) — помечено на проверку носителем
+const WIND_POINTS: Record<string, string[]> = {
+  ru: ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"],
+  kk: ["С", "СШ", "Ш", "ОШ", "О", "ОБ", "Б", "СБ"],
+  en: ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
+};
+
+export function getWindDirection(deg: number, locale = "ru"): string {
+  const points = WIND_POINTS[locale] ?? WIND_POINTS.ru;
   return points[Math.round(deg / 45) % 8];
 }
 
-// «Обновлено N минут назад» — склонение берёт на себя Intl.RelativeTimeFormat
-export function formatUpdatedAt(timestamp: number, now: number = Date.now()): string {
+// Не у всех браузеров есть kk-данные в Intl (проверено: в некоторых
+// сборках Chromium их нет) — даты и склонения тогда показываем по-русски:
+// для аудитории КЗ это понятнее английского фолбэка
+function resolveIntlLocale(locale: string): string {
+  if (
+    locale !== "ru" &&
+    locale !== "en" &&
+    Intl.DateTimeFormat.supportedLocalesOf([locale]).length === 0
+  ) {
+    return "ru";
+  }
+  return locale;
+}
+
+// «Обновлено N минут назад» — склонения берёт ICU по локали;
+// для только что случившегося обновления передаём словарную метку
+export function formatUpdatedAt(
+  timestamp: number,
+  locale: string,
+  justNowLabel: string,
+  now: number = Date.now()
+): string {
   const minutes = Math.floor((now - timestamp) / 60_000);
   if (minutes < 1) {
-    return "только что";
+    return justNowLabel;
   }
-  const rtf = new Intl.RelativeTimeFormat("ru", { numeric: "auto" });
+  const rtf = new Intl.RelativeTimeFormat(resolveIntlLocale(locale), {
+    numeric: "auto",
+  });
   if (minutes < 60) {
     return rtf.format(-minutes, "minute");
   }
@@ -63,7 +93,8 @@ function cityLocalDate(dtTxt: string, timezoneOffsetSeconds: number): Date {
 }
 
 export function processForecastData(
-  apiData: OpenWeatherForecastResponse
+  apiData: OpenWeatherForecastResponse,
+  locale: string
 ): ForecastDayData[] {
   const timezoneOffsetSeconds = apiData.city.timezone ?? 0;
 
@@ -104,7 +135,8 @@ export function processForecastData(
         }) || dayData[Math.floor(dayData.length / 2)];
 
       const { date: formattedDate, day } = formatDate(
-        cityLocalDate(dayData[0].dt_txt, timezoneOffsetSeconds)
+        cityLocalDate(dayData[0].dt_txt, timezoneOffsetSeconds),
+        locale
       );
 
       return {
@@ -122,7 +154,8 @@ export function processForecastData(
 }
 
 export function processHourlyForecastData(
-  apiData: OpenWeatherForecastResponse
+  apiData: OpenWeatherForecastResponse,
+  locale: string
 ): HourlyForecast[] {
   const timezoneOffsetSeconds = apiData.city.timezone ?? 0;
 
@@ -130,7 +163,7 @@ export function processHourlyForecastData(
   // часы — местные для города
   const hourlyData = apiData.list.slice(0, 8).map((item) => {
     const date = cityLocalDate(item.dt_txt, timezoneOffsetSeconds);
-    const time = date.toLocaleTimeString("ru", {
+    const time = date.toLocaleTimeString(resolveIntlLocale(locale), {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,

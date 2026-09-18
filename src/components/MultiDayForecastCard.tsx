@@ -2,7 +2,11 @@
 import { useState, useEffect } from "react";
 import MultiDayForecastItem from "./MultiDayForecastItem";
 import MultiDayForecastItemSkeleton from "./MultiDayForecastItemSkeleton";
-import type { ForecastDayData, OpenWeatherForecastResponse } from "@/types/weather";
+import { useI18n } from "@/i18n/LocaleProvider";
+import type {
+  ForecastDayData,
+  OpenWeatherForecastResponse,
+} from "@/types/weather";
 
 interface MultiDayForecastCardProps {
   isFocused: boolean;
@@ -15,17 +19,18 @@ export default function MultiDayForecastCard({
   loading,
   forecastData: rawForecastData,
 }: MultiDayForecastCardProps) {
+  const { locale, t } = useI18n();
   const [forecastData, setForecastData] = useState<ForecastDayData[]>([]);
 
   useEffect(() => {
     if (rawForecastData) {
       // Импортируем утилиту для обработки данных
       import("@/utils/weatherUtils").then(({ processForecastData }) => {
-        const processedData = processForecastData(rawForecastData);
+        const processedData = processForecastData(rawForecastData, locale);
         setForecastData(processedData);
       });
     }
-  }, [rawForecastData]);
+  }, [rawForecastData, locale]);
 
   return (
     <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm flex flex-col grow">
@@ -36,7 +41,7 @@ export default function MultiDayForecastCard({
             isFocused ? "text-xl" : "text-lg"
           }`}
         >
-          Прогноз на 5 дней
+          {t("forecast.multiDay")}
         </h3>
       </div>
 
