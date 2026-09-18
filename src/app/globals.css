@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Тёмная тема по классу .dark на <html>, а не по системной настройке:
+   выбор пользователя хранится в localStorage (см. ThemeToggle). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* ─── Дизайн-система: семантические токены (светлая тема) ────────────────
      Значения держим рядом с ссылками на шкалу Tailwind, чтобы шаг 10
@@ -39,9 +43,9 @@
     --color-ink-secondary: #a1a1aa; /* zinc-400 */
     --color-ink-muted: #71717a; /* zinc-500 */
     --color-line: #27272a; /* zinc-800 */
-    --color-primary: #818cf8; /* indigo-400 — светлее для контраста */
-    --color-primary-strong: #6366f1; /* indigo-500 */
-    --color-primary-soft: #1e1b4b; /* индиго-тинт на тёмном (indigo-950) */
+    --color-primary: #6366f1; /* indigo-500 — белая надпись кнопки читается */
+    --color-primary-strong: #818cf8; /* indigo-400 — hover светлее фона */
+    --color-primary-soft: #312e81; /* indigo-900 — тинт, видимый на тёмном */
   }
 }
 

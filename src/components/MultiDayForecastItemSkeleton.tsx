@@ -11,7 +11,7 @@ export default function MultiDayForecastItemSkeleton({
     <div
       className={`flex items-center justify-between px-3 py-2 rounded-xl ${
         isSelected
-          ? "bg-primary-soft border border-indigo-100"
+          ? "bg-primary-soft border border-indigo-100 dark:border-indigo-900"
           : "border border-transparent"
       }`}
     >

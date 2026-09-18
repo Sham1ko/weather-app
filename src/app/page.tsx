@@ -171,7 +171,7 @@ export default function Home() {
       {error && (
         <div
           aria-live="polite"
-          className="max-w-3xl w-full md:max-w-lg flex items-start gap-2.5 bg-rose-50 border border-rose-200 rounded-lg p-4"
+          className="max-w-3xl w-full md:max-w-lg flex items-start gap-2.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-lg p-4"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -184,13 +184,13 @@ export default function Home() {
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden="true"
-            className="shrink-0 mt-0.5 text-rose-500"
+            className="shrink-0 mt-0.5 text-rose-500 dark:text-rose-400"
           >
             <circle cx="12" cy="12" r="10" />
             <line x1="12" x2="12" y1="8" y2="12" />
             <line x1="12" x2="12.01" y1="16" y2="16" />
           </svg>
-          <p className="text-rose-600 text-sm">{error}</p>
+          <p className="text-rose-600 dark:text-rose-400 text-sm">{error}</p>
         </div>
       )}
 

@@ -10,7 +10,7 @@ export default function RedisStatusBadge({
   }
 
   return (
-    <div className="max-w-3xl w-full md:max-w-lg flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-4 py-2 text-amber-700 text-sm">
+    <div className="max-w-3xl w-full md:max-w-lg flex items-center gap-2 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 rounded-full px-4 py-2 text-amber-700 dark:text-amber-400 text-sm">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="14"

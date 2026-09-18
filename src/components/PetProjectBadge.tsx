@@ -17,7 +17,7 @@ export default function PetProjectBadge() {
             by sham1ko
           </span>
         </div>
-        <div className="bg-zinc-100 p-2 rounded-lg group-hover:bg-primary-soft">
+        <div className="bg-zinc-100 dark:bg-zinc-800 p-2 rounded-lg group-hover:bg-primary-soft">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"

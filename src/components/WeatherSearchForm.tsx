@@ -53,7 +53,7 @@ export default function WeatherSearchForm({
         autoComplete="off"
         spellCheck={false}
         enterKeyHint="search"
-        className={`border border-zinc-300 bg-surface rounded-[10px] transition-colors focus:outline-hidden focus:border-primary focus:ring-4 focus:ring-primary-soft disabled:bg-zinc-50 disabled:cursor-not-allowed ${isSubmitted ? "flex-1 p-3" : "p-4"
+        className={`border border-zinc-300 dark:border-zinc-600 bg-surface rounded-[10px] transition-colors focus:outline-hidden focus:border-primary focus:ring-4 focus:ring-primary-soft disabled:bg-zinc-50 dark:disabled:bg-zinc-800 disabled:cursor-not-allowed ${isSubmitted ? "flex-1 p-3" : "p-4"
           }`}
         placeholder="Например, Алматы…"
         value={city}
