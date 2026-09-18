@@ -5,13 +5,8 @@
 ▲ Next.js 16.3.2
 - Local:         http://localhost:3000
 - Network:       http://169.254.83.107:3000
-✓ Ready in 360ms
-✓ Running next.config.mjs took 46ms
-Cached data found for city: Костанай
+✓ Ready in 448ms
+✓ Running next.config.mjs took 60ms
+Cached data found for city: Алматы
 Cached data found for city: Almaty
-Cached data found for city: Костанай
-Cached data found for city: Almaty
-Cached data found for city: Алматы
-Cached data found for city: Алматы
-Cached data found for city: Алматы
 Cached data found for city: Алматы
