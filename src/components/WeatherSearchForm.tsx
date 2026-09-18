@@ -22,8 +22,10 @@ export default function WeatherSearchForm({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (city.trim()) {
-      onSearch(city);
+    const trimmed = city.trim();
+    if (trimmed) {
+      onSearch(trimmed);
+      setCity("");
     }
   };
 

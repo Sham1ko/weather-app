@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Header from "@/components/Header";
 import WeatherCard from "@/components/WeatherCard";
 import WeatherSearchForm from "@/components/WeatherSearchForm";
 import MultiDayForecastCard from "@/components/MultiDayForecastCard";
@@ -28,6 +29,9 @@ function getFriendlyErrorMessage(status: number): string {
 }
 
 export default function Home() {
+  // nonce меняется при сбросе на главную, чтобы перемонтировать форму
+  // и очистить введённый город
+  const [searchNonce, setSearchNonce] = useState(0);
   const [weatherData, setWeatherData] =
     useState<OpenWeatherCurrentResponse | null>(null);
   const [hourlyData, setHourlyData] = useState<HourlyForecast[]>([]);
@@ -119,8 +123,25 @@ export default function Home() {
     }
   };
 
+  // Клик по лого: полный сброс к стартовому экрану
+  const handleHomeClick = () => {
+    setLoading(false);
+    setError(null);
+    setWeatherData(null);
+    setForecastData(null);
+    setHourlyData([]);
+    setFetchedAt(null);
+    setIsSubmitted(false);
+    setIsFocused(false);
+    setRedisAvailable(null);
+    setRedisEnabled(null);
+    setSearchNonce((nonce) => nonce + 1);
+  };
+
   return (
-    <main className="flex flex-col gap-5 justify-center items-center h-full w-full pb-6">
+    <>
+      <Header onHomeClick={handleHomeClick} loading={loading} />
+      <main className="flex flex-col gap-5 justify-center items-center h-full w-full pb-6">
       {/* Карточка погоды по геолокации видна только до первого поиска */}
       {!isSubmitted && (
         <div className="w-full max-w-md">
@@ -204,6 +225,7 @@ export default function Home() {
           </div>
         </div>
       )}
-    </main>
+      </main>
+    </>
   );
 }
