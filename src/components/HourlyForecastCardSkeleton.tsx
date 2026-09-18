@@ -11,7 +11,7 @@ export default function HourlyForecastCardSkeleton({
     <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm flex flex-col grow">
       {/* Header Skeleton */}
       <div className="mb-3">
-        <div className="w-32 h-6 bg-gray-200 rounded animate-pulse"></div>
+        <div className="w-32 h-6 bg-line rounded animate-pulse"></div>
       </div>
 
       {/* Hourly Forecast Skeleton */}
@@ -19,16 +19,16 @@ export default function HourlyForecastCardSkeleton({
         {Array.from({ length: 8 }).map((_, index) => (
           <div key={index} className="text-center p-1.5 rounded-lg">
             {/* Time Skeleton */}
-            <div className="w-8 h-3 bg-gray-200 rounded animate-pulse mx-auto mb-0.5"></div>
+            <div className="w-8 h-3 bg-line rounded animate-pulse mx-auto mb-0.5"></div>
 
             {/* Weather Icon Skeleton */}
-            <div className="w-7 h-7 bg-gray-200 rounded-full animate-pulse mx-auto mb-0.5"></div>
+            <div className="w-7 h-7 bg-line rounded-full animate-pulse mx-auto mb-0.5"></div>
 
             {/* Temperature Skeleton */}
-            <div className="w-8 h-4 bg-gray-200 rounded animate-pulse mx-auto mb-0.5"></div>
+            <div className="w-8 h-4 bg-line rounded animate-pulse mx-auto mb-0.5"></div>
 
             {/* Description Skeleton */}
-            <div className="w-12 h-3 bg-gray-200 rounded animate-pulse mx-auto"></div>
+            <div className="w-12 h-3 bg-line rounded animate-pulse mx-auto"></div>
           </div>
         ))}
       </div>

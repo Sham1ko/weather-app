@@ -70,10 +70,10 @@ export default function LocationWeatherCard({
     return (
       <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm animate-pulse">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gray-200 rounded"></div>
+          <div className="w-12 h-12 bg-line rounded"></div>
           <div className="flex-1 space-y-2">
-            <div className="w-24 h-4 bg-gray-200 rounded"></div>
-            <div className="w-32 h-6 bg-gray-200 rounded"></div>
+            <div className="w-24 h-4 bg-line rounded"></div>
+            <div className="w-32 h-6 bg-line rounded"></div>
           </div>
         </div>
       </div>
@@ -84,25 +84,37 @@ export default function LocationWeatherCard({
     return (
       <div
         aria-live="polite"
-        className="bg-surface rounded-2xl border border-line p-5 shadow-sm"
+        className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-line p-6 text-center"
       >
-        <div className="flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-gray-800">
-              Не удалось определить город
             </p>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Разрешите доступ к геолокации или найдите город вручную
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => setRetryCount((count) => count + 1)}
-            className="shrink-0 text-sm font-medium text-primary hover:text-primary-strong focus-visible:ring-4 focus-visible:outline-hidden focus-visible:ring-indigo-300 rounded-lg px-3 py-2"
-          >
-            Повторить
-          </button>
-        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+          className="text-ink-muted"
+        >
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+          <circle cx="12" cy="10" r="3" />
+          <path d="m2 2 20 20" />
+        </svg>
+        <p className="font-medium text-ink">Не удалось определить город</p>
+        <p className="text-sm text-ink-secondary">
+          Разрешите доступ к геолокации или найдите город вручную
+        </p>
+        <button
+          type="button"
+          onClick={() => setRetryCount((count) => count + 1)}
+          className="mt-1 inline-flex items-center justify-center bg-primary hover:bg-primary-strong text-white font-medium rounded-[10px] transition-colors focus-visible:ring-4 focus-visible:outline-hidden focus-visible:ring-indigo-300 text-sm px-4 py-2"
+        >
+          Повторить
+        </button>
       </div>
     );
   }
@@ -119,7 +131,7 @@ export default function LocationWeatherCard({
         </div>
         <div className="flex-1">
           <h3 className="font-medium text-lg">{weather.name}</h3>
-          <p className="text-gray-600 text-sm">
+          <p className="text-ink-secondary text-sm">
             {capitalizeFirst(weather.weather[0].description)}
           </p>
         </div>

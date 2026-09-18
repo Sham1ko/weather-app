@@ -23,7 +23,7 @@ export default function HourlyForecastCard({
       {/* Header */}
       <div className="mb-3">
         <h3
-          className={`text-gray-800 font-bold ${
+          className={`text-ink font-semibold ${
             isFocused ? "text-xl" : "text-lg"
           }`}
         >
@@ -39,7 +39,7 @@ export default function HourlyForecastCard({
               key={index}
               className="text-center p-1.5 rounded-lg"
             >
-              <div className="text-xs text-gray-500 mb-0.5">{hour.time}</div>
+              <div className="text-xs text-ink-muted mb-0.5">{hour.time}</div>
               <div className="mb-0.5" aria-hidden="true">
                 <WeatherIcon
                   code={hour.icon}
@@ -47,18 +47,39 @@ export default function HourlyForecastCard({
                   className="text-ink-secondary mx-auto"
                 />
               </div>
-              <div className="text-base font-semibold text-gray-800 leading-tight">
+              <div className="text-base font-semibold text-ink leading-tight tabular-nums">
                 {hour.temp}°
               </div>
-              <div className="text-[11px] text-gray-500 truncate">
+              <div className="text-[11px] text-ink-muted truncate">
                 {hour.description}
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="text-center py-3 text-gray-500 w-full text-sm">
-          Нет данных о почасовом прогнозе
+        <div className="flex flex-col items-center gap-1.5 rounded-xl border border-dashed border-line py-6 px-4 text-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className="text-ink-muted"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <p className="text-sm font-medium text-ink">
+            Нет данных о почасовом прогнозе
+          </p>
+          <p className="text-xs text-ink-muted">
+            Попробуйте обновить данные позже
+          </p>
         </div>
       )}
     </div>

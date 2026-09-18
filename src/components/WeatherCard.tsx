@@ -52,14 +52,14 @@ export default function WeatherCard({
       {/* Заголовок и иконка */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="font-semibold text-lg text-gray-900 truncate">
+          <h2 className="font-semibold text-lg text-ink truncate">
             {city}
           </h2>
-          <p className="text-sm text-gray-500 truncate">
+          <p className="text-sm text-ink-secondary truncate">
             {capitalizeFirst(description)}
           </p>
           {typeof fetchedAt === "number" && (
-            <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
+            <div className="flex items-center gap-1 mt-1 text-xs text-ink-muted">
               <span>Обновлено {formatUpdatedAt(fetchedAt, now)}</span>
               {onRefresh && (
                 <button
@@ -67,7 +67,7 @@ export default function WeatherCard({
                   onClick={onRefresh}
                   aria-label="Обновить данные"
                   title="Обновить"
-                  className="rounded p-0.5 text-gray-400 hover:text-gray-600 focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-indigo-300"
+                  className="rounded p-0.5 text-ink-muted hover:text-ink-secondary focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-indigo-300"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -97,10 +97,10 @@ export default function WeatherCard({
       {/* Температура и компактные детали в одну строку */}
       <div className="mt-3 flex items-center justify-between gap-3">
         <div>
-          <div className="text-4xl font-semibold text-gray-900 leading-none">
+          <div className="text-4xl font-semibold text-ink leading-none tabular-nums">
             {Math.round(temperature)}°C
           </div>
-          <div className="text-sm text-gray-500 mt-1.5">
+          <div className="text-sm text-ink-secondary mt-1.5 tabular-nums">
             Ощущается как {Math.round(feelsLike)}°
           </div>
         </div>

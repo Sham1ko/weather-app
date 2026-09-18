@@ -32,7 +32,7 @@ export default function MultiDayForecastCard({
       {/* Header */}
       <div className="mb-3">
         <h3
-          className={`text-gray-800 font-bold ${
+          className={`text-ink font-semibold ${
             isFocused ? "text-xl" : "text-lg"
           }`}
         >
