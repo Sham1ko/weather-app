@@ -50,7 +50,10 @@ export default function WeatherSearchForm({
         type="text"
         id="large-input"
         aria-label="Поиск города"
-        className={`border border-gray-300 rounded-lg ${isSubmitted ? "flex-1 p-3" : "p-4"
+        autoComplete="off"
+        spellCheck={false}
+        enterKeyHint="search"
+        className={`border border-zinc-300 bg-surface rounded-[10px] transition-colors focus:outline-hidden focus:border-primary focus:ring-4 focus:ring-primary-soft disabled:bg-zinc-50 disabled:cursor-not-allowed ${isSubmitted ? "flex-1 p-3" : "p-4"
           }`}
         placeholder="Например, Алматы…"
         value={city}
