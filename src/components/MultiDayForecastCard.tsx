@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import ForecastDay from "./ForecastDay";
-import ForecastDaySkeleton from "./ForecastDaySkeleton";
+import MultiDayForecastItem from "./MultiDayForecastItem";
+import MultiDayForecastItemSkeleton from "./MultiDayForecastItemSkeleton";
 import type { WeatherForecast } from "@/types/weather";
 
-interface WeatherForecastProps {
+interface MultiDayForecastCardProps {
   isFocused: boolean;
   city: string;
   loading: boolean;
@@ -12,13 +12,13 @@ interface WeatherForecastProps {
   forecastData?: any;
 }
 
-export default function WeatherForecast({
+export default function MultiDayForecastCard({
   isFocused,
   city,
   loading,
   error,
   forecastData: rawForecastData,
-}: WeatherForecastProps) {
+}: MultiDayForecastCardProps) {
   const [forecastData, setForecastData] = useState<WeatherForecast[]>([]);
 
   useEffect(() => {
@@ -59,13 +59,13 @@ export default function WeatherForecast({
         {loading
           ? // Показываем skeleton во время загрузки
             Array.from({ length: 5 }).map((_, index) => (
-              <ForecastDaySkeleton
+              <MultiDayForecastItemSkeleton
                 key={`skeleton-${index}`}
                 isSelected={index === 0}
               />
             ))
           : forecastData.map((day, index) => (
-              <ForecastDay
+              <MultiDayForecastItem
                 key={`${day.date}-${day.day}`}
                 date={day.date}
                 day={day.day}

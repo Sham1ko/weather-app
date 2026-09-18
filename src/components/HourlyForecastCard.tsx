@@ -1,9 +1,9 @@
 "use client";
 import { getWeatherIcon } from "@/utils/weatherUtils";
-import DailyForecastSkeleton from "./DailyForecastSkeleton";
+import HourlyForecastCardSkeleton from "./HourlyForecastCardSkeleton";
 import type { HourlyForecast } from "@/types/weather";
 
-interface DailyForecastProps {
+interface HourlyForecastCardProps {
   isFocused: boolean;
   city: string;
   loading: boolean;
@@ -11,15 +11,15 @@ interface DailyForecastProps {
   hourlyData?: HourlyForecast[];
 }
 
-export default function DailyForecast({
+export default function HourlyForecastCard({
   isFocused,
   city,
   loading,
   error,
   hourlyData = [],
-}: DailyForecastProps) {
+}: HourlyForecastCardProps) {
   if (loading) {
-    return <DailyForecastSkeleton isFocused={isFocused} />;
+    return <HourlyForecastCardSkeleton isFocused={isFocused} />;
   }
 
   if (error) {

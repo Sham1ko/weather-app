@@ -1,6 +1,6 @@
 "use client";
 
-interface ForecastDayProps {
+interface MultiDayForecastItemProps {
   date: string;
   day: string;
   icon: string;
@@ -10,7 +10,7 @@ interface ForecastDayProps {
   isSelected?: boolean;
 }
 
-export default function ForecastDay({
+export default function MultiDayForecastItem({
   date,
   day,
   icon,
@@ -18,7 +18,7 @@ export default function ForecastDay({
   low,
   description,
   isSelected = false,
-}: ForecastDayProps) {
+}: MultiDayForecastItemProps) {
   return (
     <div
       className={`flex items-center justify-between px-3 py-2 rounded-lg ${

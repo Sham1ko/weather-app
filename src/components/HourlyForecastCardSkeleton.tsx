@@ -1,12 +1,12 @@
 "use client";
 
-interface DailyForecastSkeletonProps {
+interface HourlyForecastCardSkeletonProps {
   isFocused: boolean;
 }
 
-export default function DailyForecastSkeleton({
+export default function HourlyForecastCardSkeleton({
   isFocused,
-}: DailyForecastSkeletonProps) {
+}: HourlyForecastCardSkeletonProps) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-lg flex flex-col grow">
       {/* Header Skeleton */}

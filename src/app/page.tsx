@@ -2,8 +2,8 @@
 import { useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import WeatherSearchForm from "@/components/WeatherSearchForm";
-import WeatherForecast from "@/components/WeatherForecast";
-import DailyForecast from "@/components/DailyForecast";
+import MultiDayForecastCard from "@/components/MultiDayForecastCard";
+import HourlyForecastCard from "@/components/HourlyForecastCard";
 import LocationWeatherCard from "@/components/LocationWeatherCard";
 import RedisStatusBadge from "@/components/RedisStatusBadge";
 import { processHourlyForecastData } from "@/utils/weatherUtils";
@@ -170,7 +170,7 @@ export default function Home() {
               isVisible={isVisible}
               loading={loading}
             />
-            <DailyForecast
+            <HourlyForecastCard
               isFocused={isFocused}
               city={weatherData?.name || ""}
               loading={loading}
@@ -179,7 +179,7 @@ export default function Home() {
             />
           </div>
           <div className="lg:w-1/3 flex flex-col">
-            <WeatherForecast
+            <MultiDayForecastCard
               isFocused={isFocused}
               city={weatherData?.name || ""}
               loading={loading}

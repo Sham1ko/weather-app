@@ -1,12 +1,12 @@
 "use client";
 
-interface ForecastDaySkeletonProps {
+interface MultiDayForecastItemSkeletonProps {
   isSelected?: boolean;
 }
 
-export default function ForecastDaySkeleton({
+export default function MultiDayForecastItemSkeleton({
   isSelected = false,
-}: ForecastDaySkeletonProps) {
+}: MultiDayForecastItemSkeletonProps) {
   return (
     <div
       className={`flex items-center justify-between px-3 py-2 rounded-lg ${
