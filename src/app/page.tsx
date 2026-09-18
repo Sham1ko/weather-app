@@ -13,6 +13,7 @@ interface WeatherData {
   name: string;
   main: {
     temp: number;
+    feels_like: number;
     humidity: number;
   };
   weather: Array<{
@@ -21,6 +22,7 @@ interface WeatherData {
   }>;
   wind: {
     speed: number;
+    deg: number;
   };
 }
 
@@ -156,8 +158,10 @@ export default function Home() {
             <WeatherCard
               city={weatherData?.name || ""}
               temperature={weatherData?.main.temp || 0}
+              feelsLike={weatherData?.main.feels_like ?? 0}
               humidity={weatherData?.main.humidity || 0}
               windSpeed={weatherData?.wind.speed || 0}
+              windDeg={weatherData?.wind.deg ?? 0}
               description={weatherData?.weather[0].description || ""}
               icon={weatherData?.weather[0].icon || "01d"}
               isVisible={isVisible}

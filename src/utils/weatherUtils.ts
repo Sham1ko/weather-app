@@ -46,6 +46,12 @@ export function capitalizeFirst(text: string): string {
   return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
 }
 
+// Румбы ветра: API отдаёт угол в градусах (откуда дует ветер), 8 румбов
+export function getWindDirection(deg: number): string {
+  const points = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"];
+  return points[Math.round(deg / 45) % 8];
+}
+
 export function processForecastData(
   apiData: OpenWeatherForecastResponse
 ): ForecastDayData[] {

@@ -1,12 +1,18 @@
 "use client";
-import { capitalizeFirst, getWeatherIcon } from "@/utils/weatherUtils";
+import {
+  capitalizeFirst,
+  getWeatherIcon,
+  getWindDirection,
+} from "@/utils/weatherUtils";
 import WeatherCardSkeleton from "@/components/WeatherCardSkeleton";
 
 interface WeatherCardProps {
   city: string;
   temperature: number;
+  feelsLike: number;
   humidity: number;
   windSpeed: number;
+  windDeg: number;
   description: string;
   icon: string;
   isVisible: boolean;
@@ -16,8 +22,10 @@ interface WeatherCardProps {
 export default function WeatherCard({
   city,
   temperature,
+  feelsLike,
   humidity,
   windSpeed,
+  windDeg,
   description,
   icon,
   isVisible,
@@ -46,8 +54,13 @@ export default function WeatherCard({
 
       {/* Температура и компактные детали в одну строку */}
       <div className="mt-3 flex items-center justify-between gap-3">
-        <div className="text-4xl font-semibold text-gray-900 leading-none">
-          {Math.round(temperature)}°C
+        <div>
+          <div className="text-4xl font-semibold text-gray-900 leading-none">
+            {Math.round(temperature)}°C
+          </div>
+          <div className="text-sm text-gray-500 mt-1.5">
+            Ощущается как {Math.round(feelsLike)}°
+          </div>
         </div>
         <div className="flex gap-2">
           <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-1.5 text-center">
@@ -61,7 +74,7 @@ export default function WeatherCard({
           <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-1.5 text-center">
             <div className="text-[11px] text-gray-500 leading-tight">Ветер</div>
             <div className="text-sm font-medium text-gray-800">
-              {Math.round(windSpeed * 3.6)} км/ч
+              {Math.round(windSpeed * 3.6)} км/ч {getWindDirection(windDeg)}
             </div>
           </div>
         </div>
