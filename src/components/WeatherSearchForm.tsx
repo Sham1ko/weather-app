@@ -62,10 +62,36 @@ export default function WeatherSearchForm({
         <button
           type="submit"
           disabled={loading}
-          className={`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-hidden focus:ring-blue-300 font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed ${isSubmitted ? "px-6 py-3 text-sm flex-1" : "text-sm px-4 py-2 mt-4"
+          className={`inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-strong text-white font-medium rounded-[10px] transition-colors focus-visible:ring-4 focus-visible:outline-hidden focus-visible:ring-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed ${isSubmitted ? "px-6 py-3 text-sm flex-1" : "text-sm px-4 py-2 mt-4"
             }`}
         >
-          {loading ? "Загрузка…" : "Найти"}
+          {loading ? (
+            <>
+              <svg
+                className="animate-spin h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
+              </svg>
+              Загрузка…
+            </>
+          ) : (
+            "Найти"
+          )}
         </button>
       </div>
     </form>

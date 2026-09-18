@@ -68,7 +68,7 @@ export default function WeatherCard({
                   onClick={onRefresh}
                   aria-label="Обновить данные"
                   title="Обновить"
-                  className="rounded p-0.5 text-gray-400 hover:text-gray-600 focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-blue-300"
+                  className="rounded p-0.5 text-gray-400 hover:text-gray-600 focus-visible:ring-2 focus-visible:outline-hidden focus-visible:ring-indigo-300"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

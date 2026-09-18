@@ -97,7 +97,7 @@ export default function LocationWeatherCard({
           <button
             type="button"
             onClick={() => setRetryCount((count) => count + 1)}
-            className="shrink-0 text-sm font-medium text-blue-600 hover:text-blue-800 focus:ring-4 focus:outline-hidden focus:ring-blue-300 rounded-lg px-3 py-2"
+            className="shrink-0 text-sm font-medium text-primary hover:text-primary-strong focus-visible:ring-4 focus-visible:outline-hidden focus-visible:ring-indigo-300 rounded-lg px-3 py-2"
           >
             Повторить
           </button>
