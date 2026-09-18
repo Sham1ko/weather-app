@@ -34,7 +34,6 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/cloud.png" />
         <meta
           name="theme-color"
           media="(prefers-color-scheme: light)"
