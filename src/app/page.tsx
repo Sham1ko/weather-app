@@ -141,7 +141,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col gap-4 justify-center items-center h-full w-full pb-4">
+    <main className="flex flex-col gap-5 justify-center items-center h-full w-full pb-6">
       {/* Карточка погоды по геолокации видна только до первого поиска */}
       {!isSubmitted && (
         <div className="w-full max-w-md">
@@ -195,8 +195,8 @@ export default function Home() {
       )}
 
       {(weatherData || loading) && (
-        <div className="flex flex-col lg:flex-row gap-4 w-full max-w-5xl items-stretch">
-          <div className="lg:w-2/3 flex flex-col justify-between">
+        <div className="flex flex-col lg:flex-row gap-5 w-full max-w-5xl items-stretch">
+          <div className="lg:w-2/3 flex flex-col justify-between gap-5">
             <WeatherCard
               city={weatherData?.name || ""}
               temperature={weatherData?.main.temp || 0}

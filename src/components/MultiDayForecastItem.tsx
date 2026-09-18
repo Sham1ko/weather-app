@@ -23,7 +23,7 @@ export default function MultiDayForecastItem({
 }: MultiDayForecastItemProps) {
   return (
     <div
-      className={`flex items-center justify-between px-3 py-2 rounded-xl ${
+      className={`flex items-center justify-between px-4 py-2.5 rounded-xl ${
         isSelected
           ? "bg-primary-soft border border-indigo-100 dark:border-indigo-900"
           : "border border-transparent"

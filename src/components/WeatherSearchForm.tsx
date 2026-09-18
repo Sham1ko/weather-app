@@ -30,7 +30,7 @@ export default function WeatherSearchForm({
   return (
     <form
       className={`bg-surface rounded-2xl border border-line shadow-sm ${isSubmitted
-          ? "w-full max-w-5xl flex flex-row items-center p-4 gap-4"
+          ? "w-full max-w-5xl flex flex-row items-center p-5 gap-4"
           : isFocused
             ? "max-w-md md:max-w-sm flex flex-col p-6"
             : "max-w-3xl w-full md:max-w-lg flex flex-col p-10"

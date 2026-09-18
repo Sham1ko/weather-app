@@ -21,7 +21,7 @@ export default function HourlyForecastCard({
   return (
     <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm flex flex-col grow">
       {/* Header */}
-      <div className="mb-3">
+      <div className="mb-4">
         <h3
           className={`text-ink font-semibold ${
             isFocused ? "text-xl" : "text-lg"
@@ -33,7 +33,7 @@ export default function HourlyForecastCard({
 
       {/* Hourly Forecast */}
       {hourlyData.length > 0 ? (
-        <div className="grid grid-cols-4 gap-2 w-full">
+        <div className="grid grid-cols-4 gap-x-2 gap-y-3 w-full">
           {hourlyData.map((hour, index) => (
             <div
               key={index}

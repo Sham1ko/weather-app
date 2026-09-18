@@ -95,7 +95,7 @@ export default function WeatherCard({
       </div>
 
       {/* Температура и компактные детали в одну строку */}
-      <div className="mt-3 flex items-center justify-between gap-3">
+      <div className="mt-4 flex items-center justify-between gap-3">
         <div>
           <div className="text-4xl font-semibold text-ink leading-none tabular-nums">
             {Math.round(temperature)}°C

@@ -30,7 +30,7 @@ export default function MultiDayForecastCard({
   return (
     <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm flex flex-col grow">
       {/* Header */}
-      <div className="mb-3">
+      <div className="mb-4">
         <h3
           className={`text-ink font-semibold ${
             isFocused ? "text-xl" : "text-lg"
@@ -41,7 +41,7 @@ export default function MultiDayForecastCard({
       </div>
 
       {/* Forecast List */}
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-2">
         {loading
           ? // Показываем skeleton во время загрузки
             Array.from({ length: 6 }).map((_, index) => (

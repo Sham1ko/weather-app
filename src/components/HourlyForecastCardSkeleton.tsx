@@ -10,12 +10,12 @@ export default function HourlyForecastCardSkeleton({
   return (
     <div className="bg-surface rounded-2xl border border-line p-5 shadow-sm flex flex-col grow">
       {/* Header Skeleton */}
-      <div className="mb-3">
+      <div className="mb-4">
         <div className="w-32 h-6 bg-line rounded animate-pulse"></div>
       </div>
 
       {/* Hourly Forecast Skeleton */}
-      <div className="grid grid-cols-4 gap-2 w-full">
+      <div className="grid grid-cols-4 gap-x-2 gap-y-3 w-full">
         {Array.from({ length: 8 }).map((_, index) => (
           <div key={index} className="text-center p-1.5 rounded-lg">
             {/* Time Skeleton */}
