@@ -4,11 +4,18 @@ import {
   HourlyForecast,
 } from "@/types/weather";
 
-export function formatDate(dateString: string): { date: string; day: string } {
-  const date = new Date(dateString);
-  const month = date.toLocaleDateString("ru", { month: "short" });
-  const day = date.getDate();
-  const dayName = date.toLocaleDateString("ru", { weekday: "short" });
+export function formatDate(date: Date): { date: string; day: string } {
+  // date уже сдвинута в рамку города: форматируем как UTC, чтобы
+  // toLocaleDateString не сдвинул её обратно в часовой пояс зрителя
+  const month = date.toLocaleDateString("ru", {
+    month: "short",
+    timeZone: "UTC",
+  });
+  const day = date.getUTCDate();
+  const dayName = date.toLocaleDateString("ru", {
+    weekday: "short",
+    timeZone: "UTC",
+  });
 
   return {
     date: `${day} ${month}`,
@@ -45,36 +52,59 @@ export function formatUpdatedAt(timestamp: number, now: number = Date.now()): st
   return rtf.format(-Math.floor(hours / 24), "day");
 }
 
+// dt_txt приходит в UTC. Сдвигаем слот на смещение города (city.timezone
+// в секундах) и дальше работаем с ним как с UTC — так часы и даты
+// показывают местное время города, а не зрителя и не UTC
+function cityLocalDate(dtTxt: string, timezoneOffsetSeconds: number): Date {
+  return new Date(
+    new Date(dtTxt.replace(" ", "T") + "Z").getTime() +
+      timezoneOffsetSeconds * 1000
+  );
+}
+
 export function processForecastData(
   apiData: OpenWeatherForecastResponse
 ): ForecastDayData[] {
-  // Группируем данные по дням
-  const dailyData: { [key: string]: any[] } = {};
+  const timezoneOffsetSeconds = apiData.city.timezone ?? 0;
+
+  // Группируем слоты по календарным датам города; ISO-ключи "YYYY-MM-DD"
+  // идут в хронологическом порядке и сортируются лексикографически
+  const dailyData: {
+    [key: string]: OpenWeatherForecastResponse["list"][number][];
+  } = {};
 
   apiData.list.forEach((item) => {
-    const date = item.dt_txt.split(" ")[0]; // Получаем только дату
-    if (!dailyData[date]) {
-      dailyData[date] = [];
+    const key = cityLocalDate(item.dt_txt, timezoneOffsetSeconds)
+      .toISOString()
+      .slice(0, 10);
+    if (!dailyData[key]) {
+      dailyData[key] = [];
     }
-    dailyData[date].push(item);
+    dailyData[key].push(item);
   });
 
   // Преобразуем в наш формат
   const forecast: ForecastDayData[] = Object.keys(dailyData)
+    .sort()
     .slice(0, 6) // Берем только первые 6 дней
-    .map((date) => {
-      const dayData = dailyData[date];
+    .map((key) => {
+      const dayData = dailyData[key];
       const maxTemp = Math.max(...dayData.map((item) => item.main.temp_max));
       const minTemp = Math.min(...dayData.map((item) => item.main.temp_min));
 
-      // Берем данные из середины дня (обычно 12:00 или ближайшее время)
+      // Берем слот из середины дня по городскому времени (12:00–15:00)
       const middayData =
         dayData.find((item) => {
-          const hour = new Date(item.dt_txt).getHours();
+          const hour = cityLocalDate(
+            item.dt_txt,
+            timezoneOffsetSeconds
+          ).getUTCHours();
           return hour >= 12 && hour <= 15;
         }) || dayData[Math.floor(dayData.length / 2)];
 
-      const { date: formattedDate, day } = formatDate(date);
+      const { date: formattedDate, day } = formatDate(
+        cityLocalDate(dayData[0].dt_txt, timezoneOffsetSeconds)
+      );
 
       return {
         date: formattedDate,
@@ -93,13 +123,17 @@ export function processForecastData(
 export function processHourlyForecastData(
   apiData: OpenWeatherForecastResponse
 ): HourlyForecast[] {
-  // Получаем данные на ближайшие 24 часа (8 записей по 3 часа)
+  const timezoneOffsetSeconds = apiData.city.timezone ?? 0;
+
+  // Получаем данные на ближайшие 24 часа (8 записей по 3 часа);
+  // часы — местные для города
   const hourlyData = apiData.list.slice(0, 8).map((item) => {
-    const date = new Date(item.dt_txt);
+    const date = cityLocalDate(item.dt_txt, timezoneOffsetSeconds);
     const time = date.toLocaleTimeString("ru", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
+      timeZone: "UTC",
     });
 
     return {

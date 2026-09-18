@@ -52,5 +52,7 @@ export interface OpenWeatherForecastResponse {
   city: {
     name: string;
     country: string;
+    // Смещение города от UTC в секундах (учитывает DST на момент запроса)
+    timezone: number;
   };
 }

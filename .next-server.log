@@ -2,13 +2,15 @@
 > weather-app@0.1.0 start
 > next start
 
-⨯ Failed to start server
-Error: listen EADDRINUSE: address already in use :::3000
-    at <unknown> (Error: listen EADDRINUSE: address already in use :::3000)
-    at new Promise (<anonymous>) {
-  code: 'EADDRINUSE',
-  errno: -4091,
-  syscall: 'listen',
-  address: '::',
-  port: 3000
-}
+▲ Next.js 16.3.2
+- Local:         http://localhost:3000
+- Network:       http://169.254.83.107:3000
+✓ Ready in 374ms
+✓ Running next.config.mjs took 48ms
+Cached data found for city: Костанай
+Cached data found for city: Almaty
+Cached data found for city: Алматы
+Cached data found for city: Костанай
+Cached data found for city: Берлин
+Cached data found for city: Костанай
+Cached data found for city: Тула
