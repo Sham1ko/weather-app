@@ -9,9 +9,9 @@ export default function MultiDayForecastItemSkeleton({
 }: MultiDayForecastItemSkeletonProps) {
   return (
     <div
-      className={`flex items-center justify-between px-3 py-2 rounded-lg ${
+      className={`flex items-center justify-between px-3 py-2 rounded-xl ${
         isSelected
-          ? "bg-blue-50 border border-blue-200"
+          ? "bg-primary-soft border border-indigo-100"
           : "border border-transparent"
       }`}
     >

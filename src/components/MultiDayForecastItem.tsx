@@ -21,25 +21,25 @@ export default function MultiDayForecastItem({
 }: MultiDayForecastItemProps) {
   return (
     <div
-      className={`flex items-center justify-between px-3 py-2 rounded-lg ${
+      className={`flex items-center justify-between px-3 py-2 rounded-xl ${
         isSelected
-          ? "bg-blue-50 border border-blue-200"
+          ? "bg-primary-soft border border-indigo-100"
           : "border border-transparent"
       }`}
     >
       {/* Weather Icon */}
       <div className="flex items-center space-x-2.5">
         <div className="text-xl leading-none" aria-hidden="true">{icon}</div>
-        <div className="text-gray-800 leading-tight">
+        <div className="text-ink leading-tight">
           <div className="font-medium">{high}°</div>
-          <div className="text-xs text-gray-500">{low}°</div>
+          <div className="text-xs text-ink-secondary">{low}°</div>
         </div>
       </div>
 
       {/* Date and Day */}
-      <div className="text-gray-800 text-right leading-tight">
+      <div className="text-ink text-right leading-tight">
         <div className="font-medium">{date}</div>
-        <div className="text-xs text-gray-500">{day}</div>
+        <div className="text-xs text-ink-secondary">{day}</div>
       </div>
     </div>
   );
