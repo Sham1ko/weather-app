@@ -58,7 +58,7 @@ export default function MultiDayForecastCard({
       <div className="flex flex-col gap-1.5">
         {loading
           ? // Показываем skeleton во время загрузки
-            Array.from({ length: 5 }).map((_, index) => (
+            Array.from({ length: 6 }).map((_, index) => (
               <MultiDayForecastItemSkeleton
                 key={`skeleton-${index}`}
                 isSelected={index === 0}
