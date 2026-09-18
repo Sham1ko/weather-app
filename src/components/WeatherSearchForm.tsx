@@ -3,7 +3,6 @@ import { useState } from "react";
 
 interface WeatherSearchFormProps {
   onSearch: (city: string) => void;
-  onMock: () => void;
   loading: boolean;
   isFocused: boolean;
   isSubmitted: boolean;
@@ -11,7 +10,6 @@ interface WeatherSearchFormProps {
 
 export default function WeatherSearchForm({
   onSearch,
-  onMock,
   loading,
   isFocused,
   isSubmitted,
@@ -45,7 +43,7 @@ export default function WeatherSearchForm({
           htmlFor="large-input"
           className="flex justify-center text-4xl mb-5"
         >
-          Search city
+          Поиск города
         </label>
       )}
 
@@ -55,7 +53,7 @@ export default function WeatherSearchForm({
         className={`border border-gray-300 rounded-lg ${
           isSubmitted ? "flex-1 p-3" : "p-4"
         }`}
-        placeholder="Enter city"
+        placeholder="Введите город"
         value={city}
         onChange={handleChange}
         disabled={loading}
@@ -69,18 +67,7 @@ export default function WeatherSearchForm({
             isSubmitted ? "px-6 py-3 text-sm flex-1" : "text-sm px-4 py-2 mt-4"
           }`}
         >
-          {loading ? "Загрузка..." : "Search"}
-        </button>
-
-        <button
-          type="button"
-          onClick={onMock}
-          disabled={loading}
-          className={`text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-hidden focus:ring-green-300 font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed ${
-            isSubmitted ? "px-6 py-3 text-sm flex-1" : "text-sm px-4 py-2 mt-2"
-          }`}
-        >
-          Mock
+          {loading ? "Загрузка..." : "Найти"}
         </button>
       </div>
     </form>

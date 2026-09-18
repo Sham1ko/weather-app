@@ -7,11 +7,6 @@ import HourlyForecastCard from "@/components/HourlyForecastCard";
 import LocationWeatherCard from "@/components/LocationWeatherCard";
 import RedisStatusBadge from "@/components/RedisStatusBadge";
 import { processHourlyForecastData } from "@/utils/weatherUtils";
-import {
-  mockWeatherData,
-  mockForecastData,
-  mockHourlyData,
-} from "@/utils/mockData";
 import type { HourlyForecast } from "@/types/weather";
 
 interface WeatherData {
@@ -98,31 +93,6 @@ export default function Home() {
     }
   };
 
-  const handleMock = () => {
-    setLoading(true);
-    setError(null);
-    setIsSubmitted(true);
-    setIsFocused(true); // Сразу устанавливаем фокус при начале загрузки
-
-    // Сразу показываем карточку погоды при начале загрузки
-    if (!isVisible) {
-      setTimeout(() => {
-        setIsVisible(true);
-      }, 100);
-    }
-
-    // Имитируем задержку загрузки
-    setTimeout(() => {
-      setWeatherData(mockWeatherData);
-      setForecastData(mockForecastData);
-      setHourlyData(mockHourlyData);
-      setRedisAvailable(null);
-      setRedisEnabled(null);
-
-      setLoading(false);
-    }, 1000);
-  };
-
   return (
     <main className="flex flex-col gap-4 justify-center items-center h-full w-full pb-4">
       {/* Карточка погоды по геолокации видна только до первого поиска */}
@@ -145,7 +115,6 @@ export default function Home() {
 
       <WeatherSearchForm
         onSearch={handleSearch}
-        onMock={handleMock}
         loading={loading}
         isFocused={isFocused}
         isSubmitted={isSubmitted}
